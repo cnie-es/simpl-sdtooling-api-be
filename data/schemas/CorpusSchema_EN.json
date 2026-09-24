@@ -1,0 +1,8 @@
+{
+  "id":"CorpusSchema_EN",
+  "name": "Corpus",
+  "title": "Corpus",
+  "description": "Schema for corpus offerings in the edval dataspace",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "required": [
+    "type",
+    "assetType",
+    "codeLocation",
+    "repositoryName",
+    "jobName",
+    "yamlConfiguration"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "ProcessingWorkflow",
+      "default": "ProcessingWorkflow",
+      "description": "Resource address type identifying a workflow-based processing resource."
+    },
+    "assetType": {
+      "type": "string",
+      "const": "RD_DATA",
+      "default": "RD_DATA",
+      "description": "Tag for filtering the research"
+    },
+    "codeLocation": {
+      "type": "string",
+      "description": "Location of the code repository containing the workflow/job definition."
+    },
+    "repositoryName": {
+      "type": "string",
+      "description": "Repository name within the code location where the workflow/job is defined."
+    },
+    "jobName": {
+      "type": "string",
+      "description": "Name of the selected Dagster workflow/job associated with the resource."
+    },
+    "yamlConfiguration": {
+      "type": "string",
+      "description": "YAML configuration describing workflow execution parameters.",
+      "minLength": 5
+    }
+  }
+}

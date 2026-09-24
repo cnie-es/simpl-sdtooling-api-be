@@ -1,0 +1,54 @@
+{
+	"type": "object",
+	"required": [
+		"type",
+		"region",
+		"storage",
+		"bucketName",
+		"blobName",
+		"accessKey",
+		"secretKey",
+        "keyName"
+	],
+	"properties": {
+		"type": {
+			"type": "string",
+			"const": "IonosS3",
+            "default": "IonosS3"
+		},
+		"region": {
+			"type": "string",
+			"enum": [
+				"de",
+				"us",
+				"uk"
+			]
+		},
+		"storage": {
+			"type": "string",
+			"format": "uri"
+		},
+		"bucketName": {
+			"type": "string",
+			"pattern": "^[a-z0-9.-]{3,63}$",
+			"description": "Bucket name must be between 3 and 63 characters and lowercase"
+		},
+		"blobName": {
+			"type": "string",
+			"minLength": 5,
+			"maxLength": 255,
+			"description": "File blob name"
+		},
+		"accessKey": {
+			"type": "string",
+			"minLength": 20
+		},
+		"secretKey": {
+			"type": "string",
+			"minLength": 20
+		},
+		"keyName": {
+			"type": "string"
+		}
+	}
+}

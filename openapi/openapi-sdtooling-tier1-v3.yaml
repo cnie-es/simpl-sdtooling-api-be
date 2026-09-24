@@ -1,0 +1,210 @@
+info:
+  title: SD Tooling API
+  description: |-
+    The APIs described in the following document enable the management
+    of the lifecycle for creating a Resource Description on the provider side, including
+    its publication on the federated catalogue. The available APIs allow to define
+    access and usage policies, specify the Resource Address on the provider side,
+    and manage the validation and publication process on the federated catalogue.
+
+    ## Business Context
+
+    The API facilitates the creation and management of Resource Descriptions in a federated data space. It enables providers to publish metadata about their data assets on a federated catalogue, define access and usage policies, and manage the validation and publication workflow. This supports discoverability and interoperability across the data ecosystem.
+
+
+    ### Key Actors
+
+    - **Provider**: Creates and publishes Resource Descriptions, defines policies, and manages validation.
+
+    - **Governance Authority**: Hosts the Federated Catalogue
+
+    ### Typical Flow
+
+    1. Create a Resource Description.
+
+    2. Define access and usage policies.
+
+    3. Specify the Resource Address.
+
+    4. Submit the Resource Description for validation
+
+    5. Publish the Resource Description on the federated catalogue
+  contact:
+    name: Simpl Programme
+    url: https://simpl-programme.ec.europa.eu/
+    email: cnect-simpl@ec.europa.eu
+  license:
+    name: European Union Public License (EUPL) 1.2
+    url: https://interoperable-europe.ec.europa.eu/sites/default/files/custom-page/attachment/eupl_v1.2_en.pdf
+  version: "1.0"
+servers:
+- url: https://creation-wizard-api.dev.simpl-europe.eu/v3
+security:
+- bearerAuth: []
+openapi: 3.0.1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: IAA cloud gateway JWT token
+      scheme: bearer
+      bearerFormat: JWT
+  schemas: {}
+paths:
+  /selfDescriptions/enriched:
+    post:
+      tags:
+      - Self Description
+      summary: Enriches and validates a self-description using the provided metadata and additional properties
+      description: Adds hashing, registers asset and policies into the provider EDC, creates a contract definition on EDC connector and validates the resulting SD json enriched with all info. Allows passing additional properties via a JSON string.
+      operationId: enrichAndValidate
+      parameters:
+      - name: schemaId
+        in: query
+        description: schemaId
+        required: true
+        schema:
+          type: string
+        example: DataSchema1
+      requestBody:
+        description: Request body containing SD JSON-LD and additional properties
+        content:
+          application/json:
+            schema:
+              required:
+              - properties
+              - sdJson
+              type: object
+              example:
+                sdJson:
+                  '@context': http://www.w3.org/ns/odrl.jsonld
+                  '@type': Set
+                  assigner:
+                    role: http://www.w3.org/ns/odrl/2/assigner
+                    uid: provider
+                  permission:
+                  - action:
+                    - http://simpl.eu/odrl/actions/search
+                    assignee:
+                      role: http://www.w3.org/ns/odrl/2/assignee
+                      uid: CONSUMER
+                    constraint:
+                    - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                      operator: http://www.w3.org/ns/odrl/2/gteq
+                      rightOperand: 2024-08-01T00:00:00Z
+                    - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                      operator: http://www.w3.org/ns/odrl/2/lteq
+                      rightOperand: 2024-08-31T23:59:59Z
+                    target: ""
+                  profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                  target: ""
+                  uid: 68777919-f260-4305-9c41-d4266ac0a639
+                properties:
+                  resourceAddress:
+                    templateId: "5"
+                    value: '{"type":"MinioS3", "endpoint":"https://minio.simpl-europe.eu", "bucketName":"provider-bucket", "objectName":"example-s3.txt"}'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The schemaId parameter must meet specific criteria
+                      in: query
+                      name: schemaId
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+                    instance: /selfDescriptions/enriched
+        "200":
+          description: Successfully enriched and validated SD JSON-LD
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                SD json file enriched and validated:
+                  description: SD json file enriched and validated
+                  value:
+                    '@context': http://www.w3.org/ns/odrl.jsonld
+                    '@type': Set
+                    assigner:
+                      role: http://www.w3.org/ns/odrl/2/assigner
+                      uid: provider
+                    permission:
+                    - action:
+                      - http://simpl.eu/odrl/actions/search
+                      assignee:
+                        role: http://www.w3.org/ns/odrl/2/assignee
+                        uid: CONSUMER
+                      constraint:
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/gteq
+                        rightOperand: 2024-08-01T00:00:00Z
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/lteq
+                        rightOperand: 2024-08-31T23:59:59Z
+                      target: ""
+                    profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                    target: ""
+                    uid: 68777919-f260-4305-9c41-d4266ac0a639
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              examples:
+                Unauthorized Error Example:
+                  description: Unauthorized Error Example
+                  value:
+                    type: urn:problem-type:simpl:unauthorized
+                    title: Unauthorized
+                    status: 401
+                    detail: Missing or invalid Authorization header
+                    instance: /selfDescriptions/enriched
+        "406":
+          description: Not Acceptable
+          content:
+            application/problem+json:
+              examples:
+                Not Acceptable Error Example:
+                  description: Not Acceptable Error Example
+                  value:
+                    type: urn:problem-type:simpl:notAcceptable
+                    title: Not Acceptable
+                    status: 406
+                    detail: The requested media type could not be provided
+                    instance: /selfDescriptions/enriched
+        "415":
+          description: Unsupported Media Type
+          content:
+            application/problem+json:
+              examples:
+                Unsupported Media Type Error Example:
+                  description: Unsupported Media Type Error Example
+                  value:
+                    type: urn:problem-type:simpl:unsupportedMediaType
+                    title: Unsupported Media Type
+                    status: 415
+                    detail: The media type in the request payload is unsupported
+                    instance: /selfDescriptions/enriched

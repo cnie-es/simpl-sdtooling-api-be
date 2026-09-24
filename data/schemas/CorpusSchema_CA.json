@@ -1,0 +1,8 @@
+{
+  "id":"CorpusSchema_CA",
+  "name": "Corpus",
+  "title": "Corpus",
+  "description": "Esquema per a ofertes de tipus Corpus al dataspace d'edval",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

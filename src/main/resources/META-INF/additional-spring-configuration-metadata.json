@@ -1,0 +1,87 @@
+{"properties": [
+  {
+    "name": "web.mvc.cors.allowed-origins",
+    "type": "java.lang.String",
+    "description": "A description for 'web.mvc.cors.allowed-origins'"
+  },
+  {
+    "name": "web.mvc.bearer-token.required",
+    "type": "java.lang.String",
+    "description": "A description for 'web.mvc.bearer-token.required'"
+  },
+  {
+    "name": "federated-catalogue.tier2-gateway.path-prefix",
+    "type": "java.lang.String",
+    "description": "A description for 'federated-catalogue.tier2-gateway.path-prefix'"
+  },
+  {
+    "name": "web.mvc.bearer-token.allowed-paths",
+    "type": "java.lang.String",
+    "description": "A description for 'web.mvc.bearer-token.allowed-paths'"
+  },
+  {
+    "name": "openapi-config.servers",
+    "type": "java.lang.String",
+    "description": "A description for 'openapi-config.servers'"
+  },
+  {
+    "name": "feign.client.config.default.logger-level",
+    "type": "java.lang.String",
+    "description": "A description for 'feign.client.config.default.logger-level'"
+  },
+  {
+    "name": "connector-adapter.tier1-gateway.url",
+    "type": "java.lang.String",
+    "description": "A description for 'connector-adapter.tier1-gateway.url'"
+  },
+  {
+    "name": "feign.client.config.default.connect-timeout",
+    "type": "java.lang.String",
+    "description": "A description for 'feign.client.config.default.connect-timeout'"
+  },
+  {
+    "name": "feign.client.config.default.read-timeout",
+    "type": "java.lang.String",
+    "description": "A description for 'feign.client.config.default.read-timeout'"
+  },
+  {
+    "name": "users-roles.tier1-gateway.url",
+    "type": "java.lang.String",
+    "description": "A description for 'users-roles.tier1-gateway.url'"
+  },
+  {
+    "name": "authentication-provider.service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'authentication-provider.service.url'"
+  },
+  {
+    "name": "federated-catalogue.tier2-gateway.url",
+    "type": "java.lang.String",
+    "description": "A description for 'federated-catalogue.tier2-gateway.url'"
+  },
+  {
+    "name": "openapi-config.security.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'openapi-config.security.enabled'"
+  },
+  {
+    "name": "openapi-config.title",
+    "type": "java.lang.String",
+    "description": "A description for 'openapi-config.title'"
+  },
+  {
+    "name": "connector-adapter.service.url",
+    "type": "java.lang.String",
+    "description": "A description for 'connector-adapter.service.url'"
+  },
+  {
+    "name": "catalogue-adapter.tier2-gateway.url",
+    "type": "java.lang.String",
+    "description": "A description for 'catalogue-adapter.tier2-gateway.url'"
+  },
+  {
+    "name": "catalogue-adapter.tier2-gateway.path-prefix",
+    "type": "java.lang.String",
+    "description": "A description for 'catalogue-adapter.tier2-gateway.path-prefix'"
+  }
+]}

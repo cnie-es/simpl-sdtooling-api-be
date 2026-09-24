@@ -1,0 +1,33 @@
+{
+	"type": "object",
+	"required": [
+		"type",
+		"bucketName",
+		"objectName",
+		"endpoint"
+	],
+	"properties": {
+		"type": {
+			"type": "string",
+			"const": "MinioS3",
+			"default": "MinioS3"
+		},
+		"bucketName": {
+			"type": "string",
+			"pattern": "^[a-z0-9.-]{3,63}$",
+			"description": "Bucket name must be between 3 and 63 characters and lowercase"
+		},
+		"objectName": {
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 1024,
+			"description": "Object name within the bucket"
+		},
+		"endpoint": {
+			"type": "string",
+			"format": "uri",
+			"description": "MinIO server endpoint URL"
+		}
+	}
+}
+

@@ -1,0 +1,48 @@
+resource-address:
+  config:
+    template-map:
+      DATA:
+        IONOS_S3:
+          - id: 1
+            label: Data Template IonosS3 (1)
+          - id: 2
+            label: Data Template IonosS3 (2)
+        HTTPDATA_PUSH:
+          - id: 3
+            label: Data Template HttpDataPush
+        MINIO_S3:
+          - id: 5
+            label: Data Template MinioS3
+          - id: 8
+            label: Data Template Processing Workflow
+        EDELIVERY:
+          - id: 6
+            label: Data Template eDelivery
+        BULK_S3:
+          - id: 7
+            label: Data Template BulkS3
+          - id: 9
+            label: Data Template Processing Workflow
+        DATASTREAM:
+          - id: 10
+            label: Data Template DataStream
+        REST_API:
+          - id: 14
+            label: Data Template REST API
+        AMAZON_S3:
+          - id: 15
+            label: Data Template AmazonS3
+      APPLICATION:
+        APP_DEPLOYER:
+          - id: 11
+            label: Application Template App Deployer
+        PROVIDER_HOSTED_AUTOMATIC:
+          - id: 12
+            label: Application Template Provider Hosted Automatic
+        PROVIDER_HOSTED_MANUAL:
+            - id: 13
+              label: Application Template Provider Hosted Manual
+      INFRASTRUCTURE:
+        IONOS_INFRA:
+          - id: 4
+            label: Infra Template IonosInfra

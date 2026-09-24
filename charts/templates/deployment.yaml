@@ -1,0 +1,182 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-creation-wizard-api
+  labels:
+    app: sd-api
+  annotations:
+    # ArgoCD annotation to control the sync order of resources. Resources with lower sync-wave values are applied before those with higher values.
+    argocd.argoproj.io/sync-wave: "{{ .Values.argocd.syncWave }}"
+spec:
+  # replicas are specified ONLY when autoscaling is disabled
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount | default 1 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: sd-api
+  template:
+    metadata:
+      annotations:
+#        vault.hashicorp.com/agent-inject: "true"
+#        vault.hashicorp.com/role: "gaiax-edc_role"
+#        vault.hashicorp.com/agent-inject-secret-config.txt: "{{ .Values.vaultEnvIdentifier }}/{{ .Release.Namespace }}-sd-creation-wizard-api"
+#        vault.hashicorp.com/agent-inject-template-config.txt: |
+#          {{`{{ with secret "`}}{{ .Values.vaultEnvIdentifier }}/{{ .Release.Namespace }}{{`-sd-creation-wizard-api" }}
+#          {{ range $k, $v := .Data.data }}
+#            export {{ $k }}={{ $v }}
+#          {{ end }}
+#          {{ end }}`}}
+      labels:
+        app: sd-api
+    spec:
+      # fixing fortify issue 'Kubernetes Misconfiguration: Service Account Token Automounted'
+      automountServiceAccountToken: false
+
+      # fixing fortify issue 'Kubernetes Misconfiguration: Improper Deployment Access Control'
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+
+      serviceAccountName: {{ if .Values.serviceAccount }}{{ .Values.serviceAccount.name | default .Release.Name }}{{ else }}{{ .Release.Name }}{{ end }}
+
+      volumes:
+        - name: data-storage
+          persistentVolumeClaim:
+            claimName: {{ .Values.schemaVolumeClaim }}
+        - name: {{ .Release.Name }}-configmap
+          configMap:
+            name: {{ .Release.Name }}-configmap
+
+        # alternative method to mount the serviceAccountToken when automountServiceAccountToken=false
+        - name: custom-token
+          projected:
+            defaultMode: 420
+            sources:
+            - serviceAccountToken:
+                path: token
+                expirationSeconds: 600
+                audience: openbao
+            - configMap:
+                name: kube-root-ca.crt
+                items:
+                - key: ca.crt
+                  path: ca.crt
+            - downwardAPI:
+                items:
+                - fieldRef:
+                    apiVersion: v1
+                    fieldPath: metadata.namespace
+                  path: namespace
+
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-api
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources: {{ toYaml .Values.resources | nindent 12 }}
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+
+          volumeMounts:
+            - name: data-storage
+              mountPath: {{ .Values.schemaPvcMountPath }}
+            - name: {{ .Release.Name }}-configmap
+              mountPath: /config
+            - name: custom-token
+              mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+
+          env:
+            - name: ASSET_ORCHESTRATOR_SERVICE_URL
+              value: {{ .Values.assetOrchestrator.service.url | quote }}
+
+            - name: AUTHENTICATION_PROVIDER_SERVICE_URL
+              value: {{ .Values.authenticationProvider.service.url | quote }}
+
+            - name: CONNECTOR_ADAPTER_SERVICE_URL
+              value: {{ .Values.connectorAdapter.service.url | quote }}
+
+            - name: CATALOGUE_ADAPTER_TIER2_GATEWAY_URL
+              value: {{ .Values.catalogueAdapter.tier2Gateway.url | quote }}
+            - name: CATALOGUE_ADAPTER_TIER2_GATEWAY_PATH_PREFIX
+              value: {{ .Values.catalogueAdapter.tier2Gateway.pathPrefix | quote }}
+            - name: CATALOGUE_ADAPTER_MOCK_REVOKE_RESOURCE_DESCRIPTION
+              value: {{ (.Values.catalogueAdapter.mock).revokeResourceDescription | default "" | quote }}
+
+            - name: FEDERATED_CATALOGUE_TIER2_GATEWAY_URL
+              value: {{ .Values.federatedCatalogue.tier2Gateway.url | quote }}
+            - name: FEDERATED_CATALOGUE_TIER2_GATEWAY_PATH_PREFIX
+              value: {{ .Values.federatedCatalogue.tier2Gateway.pathPrefix | quote }}
+
+            - name: HASH_CONFIG_ALGORITHM
+              value: {{ .Values.hash.config.algorithm | quote }}
+            - name: HASH_CONFIG_TEMPLATES
+              value: {{ .Values.hash.config.templates | quote }}
+            - name: HASH_CONFIG_MODELS
+              value: {{ .Values.hash.config.models | quote }}
+
+            # to override log4j2.component.properties entry named log4j2.configurationFile
+            - name: LOG4J_CONFIGURATION_FILE
+              value: {{ .Values.log4j.config.file | quote }}
+
+            - name: OFFERING_TYPE_CONFIG_TEMPLATES
+              value: {{ .Values.offeringType.config.templates | quote }}
+
+            - name: OPENAPI_CONFIG_SERVERS
+              value: {{ .Values.openapiConfig.servers | quote }}
+
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ .Values.openTelemetry.otlpExporter.endpoint | quote }}
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: {{ .Values.openTelemetry.otlpExporter.protocol | quote }}
+            - name: OTEL_PROPAGATORS
+              value: {{ .Values.openTelemetry.propagators | quote }}
+            - name: OTEL_RESOURCE_ATTRIBUTES_DEPLOYMENT_ENVIRONMENT
+              value: {{ .Values.openTelemetry.environment | quote }}
+            - name: OTEL_SDK_DISABLED
+              value: {{ .Values.openTelemetry.disabled | quote }}
+
+            - name: SCHEMA_SYNC_SERVICE_REPOSITORY_PATH
+              value: {{ .Values.schemaSyncService.repositoryPath | quote }}
+
+            - name: SCHEMA_SYNC_ADAPTER_SERVICE_URL
+              value: {{ .Values.schemaSyncAdapter.service.url | quote }}
+
+            - name: VALIDATION_CONFIG_ENABLED
+              value: {{ .Values.validation.config.enabled | quote }}
+            - name: VALIDATION_CONFIG_DOMAIN
+              value: {{ .Values.validation.config.domain | quote }}
+
+            - name: WEB_MVC_CORS_ALLOWED_ORIGINS
+              value: {{ .Values.web.mvc.cors.allowedOrigins | quote }}
+            - name: WEB_MVC_BEARER_TOKEN_REQUIRED
+              value: {{ .Values.web.mvc.bearerToken.required | quote }}
+            - name: WEB_MVC_BEARER_TOKEN_ALLOWED_PATHS
+              value: {{ .Values.web.mvc.bearerToken.allowedPaths | quote }}
+
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: {{ .Values.containerPort }}
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: {{ .Values.containerPort }}
+              httpHeaders:
+                - name: Accept
+                  value: application/json
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3

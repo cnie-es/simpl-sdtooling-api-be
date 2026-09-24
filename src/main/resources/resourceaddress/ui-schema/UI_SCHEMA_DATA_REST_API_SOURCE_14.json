@@ -1,0 +1,70 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/type",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "scope": "#/properties/type",
+          "schema": {}
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/name",
+      "label": "Resource name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/baseUrl",
+      "label": "Base URL"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/proxyPath",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "scope": "#/properties/proxyPath",
+          "schema": {}
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/proxyQueryParams",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "scope": "#/properties/proxyQueryParams",
+          "schema": {}
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/proxyBody",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "scope": "#/properties/proxyBody",
+          "schema": {}
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/proxyMethod",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "scope": "#/properties/proxyMethod",
+          "schema": {}
+        }
+      }
+    }
+  ]
+}

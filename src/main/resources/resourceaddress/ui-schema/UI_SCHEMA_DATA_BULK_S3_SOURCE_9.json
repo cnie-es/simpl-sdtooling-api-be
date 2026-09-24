@@ -1,0 +1,50 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/type",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "scope": "#/properties/type",
+          "schema": {}
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/assetType",
+      "rule": {
+        "effect": "HIDE",
+        "condition": {
+          "scope": "#/properties/assetType",
+          "schema": {}
+        }
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/codeLocation",
+      "label": "Code Location"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/repositoryName",
+      "label": "Repository Name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/jobName",
+      "label": "Workflow ID"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/yamlConfiguration",
+      "label": "Workflow Configuration",
+      "options": {
+        "multi": true
+      }
+    }
+  ]
+}

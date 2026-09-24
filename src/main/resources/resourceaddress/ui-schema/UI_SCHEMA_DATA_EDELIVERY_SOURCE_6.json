@@ -1,0 +1,30 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/type",
+      "label": "Source type",
+      "options": {
+        "readonly": true
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/edeliveryTriggerAPI",
+      "label": "eDelivery Trigger API URL",
+      "options": {
+        "placeholder": "Enter eDelivery trigger API endpoint URL"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/appDataIdentifier",
+      "label": "Application Data Identifier",
+      "options": {
+        "placeholder": "Enter application data identifier"
+      }
+    }
+  ]
+}
+

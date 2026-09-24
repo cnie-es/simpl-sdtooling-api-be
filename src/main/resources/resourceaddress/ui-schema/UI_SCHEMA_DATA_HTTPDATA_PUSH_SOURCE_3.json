@@ -1,0 +1,32 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/type",
+      "label": "Source type",
+      "options": {
+        "readonly": true
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/name",
+      "label": "Resource name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/baseUrl",
+      "label": "Base URL"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/proxyPath",
+      "label": "Enable path proxy",
+      "options": {
+        "format": "radio"
+      }
+    }
+  ]
+}
+

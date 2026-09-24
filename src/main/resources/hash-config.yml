@@ -1,0 +1,66 @@
+#HashConfig
+#Configure field name based on YAML file and "value" of URL
+hash:
+  config:
+    algorithm: "SHA256"
+    templates: '[
+                  {
+                    "key": "Contract Template 1",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/contract/ContractTemplate1.json"
+                  },
+                  {
+                    "key": "Contract Template 2",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/contract/ContractTemplate2.json"
+                  },
+                  {
+                    "key": "Contract Template 3",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/contract/ContractTemplate3.json"
+                  },
+                  {
+                    "key": "Billing Schema 1",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/BillingSchema1.pdf"
+                  },
+                  {
+                    "key": "Billing Schema 2",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/BillingSchema2.pdf"
+                  },
+                  {
+                    "key": "Billing Schema 3",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/BillingSchema1.pdf"
+                  },
+                  {
+                    "key": "Sla Agreements 1",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/SLAAgreement1.pdf"
+                  },
+                  {
+                    "key": "Sla Agreements 2",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/SLAAgreement2.pdf"
+                  },
+                  {
+                    "key": "Sla Agreements 3",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/SLAAgreement1.pdf"
+                  }
+                ]'
+    models: '[
+                {
+                  "hashObj": "contractTemplate",
+                  "hashDoc": "contractTemplateDocument",
+                  "hashAlg": "contractTemplateHashAlg",
+                  "hashValue": "contractTemplateHashValue",
+                  "hashUrl": "contractTemplateURL"
+                },
+                {
+                  "hashObj": "billingSchema",
+                  "hashDoc": "billingSchemaDocument",
+                  "hashAlg": "billingSchemaHashAlg",
+                  "hashValue": "billingSchemaHashValue",
+                  "hashUrl": "billingSchemaURL"
+                },
+                {
+                  "hashObj": "slaAgreements",
+                  "hashDoc": "slaAgreementsDocument",
+                  "hashAlg": "slaAgreementsHashAlg",
+                  "hashValue": "slaAgreementsHashValue",
+                  "hashUrl": "slaAgreementsURL"
+                }
+              ]'

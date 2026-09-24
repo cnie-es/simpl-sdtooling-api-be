@@ -1,0 +1,255 @@
+# service port
+servicePort: 8080
+
+# container port
+containerPort: 8080
+
+# specify 'dev' for dev environment or 'dev-int' for integration environment
+vaultEnvIdentifier: dev
+
+# specify 'dev' for dev environment or 'int' for integration environment
+domainUrlEnvIdentifier: dev
+
+# domain associated with Dev Cluster (don't modify it)
+domain: dev.simpl-europe.eu
+
+log4j:
+  config:
+    # to override log4j2.component.properties entry named log4j2.configurationFile
+    # to add log4j2-app.xml created by configmap.yaml into the folder config mounted by deplyment.yaml
+    file: classpath:log4j2.xml,file:/config/log4j2-app.xml
+  # config file monitoring interval for hot changes (seconds)
+  monitorInterval: 10
+  level:
+    # logging level for all logs excluding the specific ones
+    root: INFO
+    # logging level for application components only
+    app: INFO
+    # logging level for feign clients only
+    feign: INFO
+
+# comma separated list of servers url to be used by swagger
+openapiConfig:
+  servers: https://creation-wizard-api.dev.simpl-europe.eu
+
+openTelemetry:
+  # disables the OpenTelemetry SDK (true on local dev)
+  disabled: true
+  # used to identify the environment
+  environment: local-dev
+  otlpExporter:
+    # collector endpoint for the OTLP exporter
+    endpoint: http://collector.common01.dev.simpl-europe.eu
+    # protocol used by the OTLP exporter (http/protobuf or grpc)
+    protocol: http/protobuf
+  # context propagation type
+  propagators: tracecontext
+
+# ID of persistentVolumeClaims associated with NFS Storage
+schemaVolumeClaim: nfs-storage-pvc
+# mount path used for schema storage
+schemaPvcMountPath: /home/simpluser/data
+
+# absolute path to the schema repository synced by the schema-synch-adapter
+schemaSyncService:
+  repositoryPath: /home/simpluser/data/schemas
+
+# schema sync adapter application
+schemaSyncAdapter:
+  service:
+    # URL to the Schema Sync Adapter participant service
+    url: "http://schema-sync-adapter:8080"
+
+# asset-orchestrator application
+assetOrchestrator:
+  service:
+    # URL to the Asset Orchestrator participant service
+    url: "http://asset-orchestrator:8080"
+
+# resources configuration
+resources:
+  requests:
+    cpu: "100m"
+    memory: "0Gi"
+  limits:
+    cpu: "1000m"
+    memory: "2Gi"
+
+# replicas used ONLY when autoscaling.enabled = false
+replicaCount: 1
+
+# horizontal Pod Autoscaler configuration
+autoscaling:
+  enabled: false                  # Set true to enable HPA
+  minReplicas: 1                  # Minimum number of pods
+  maxReplicas: 5                  # Maximum number of pods
+  targetCPUUtilizationPercentage: 75  # CPU % threshold based on requests
+  # Optional: memory autoscaling (uncomment if needed)
+  # targetMemoryUtilizationPercentage: 80
+  # behavior:
+    #   scaleUp:
+    #     stabilizationWindowSeconds: 60
+    #     policies:
+    #       - type: Percent
+    #         value: 100
+    #         periodSeconds: 60
+    #   scaleDown:
+    #     stabilizationWindowSeconds: 300
+    #     policies:
+    #       - type: Percent
+    #         value: 100
+    #         periodSeconds: 60
+
+
+ingress:
+  # enable ingress only for development purpose
+  # on production environment this service must be exposed through the participant tier1 gateway only
+  enabled: false
+  clusterIssuer: dev-prod
+  ingressClass: nginx
+
+# configuration for connectivity between SD-Tooling-Api-Be and SD-Tooling-Api-Validation
+validation:
+  config:
+    enabled: true
+    # domain is the URL of SD-Tooling-Api-Validation service
+    # (sdtool-validation is name of Kube service associated. Check it!)
+    domain: "http://sdtool-validation:8080"
+
+image:
+  # Published image of this fork. Override for builds published elsewhere, e.g.
+  # --set image.repository=ghcr.io/<owner>/sdtooling-api-be
+  repository: "ghcr.io/cnie-es/sdtooling-api-be"
+  pullPolicy: IfNotPresent
+  # Empty means .Chart.AppVersion. Set it to deploy a specific build, e.g. a commit SHA tag.
+  tag: ""
+  # Names of pre-created image pull secrets. Required while the image is private.
+  pullSecrets: []
+
+
+web:
+  mvc:
+    cors:
+      # optional allowed origins for cross calls (list separed by comma or * to allow all origins)
+      # if empty no cross calls are allowed
+      allowedOrigins: ""
+
+    bearerToken:
+      # if true a JWT token must be present as Bearer in any request
+      required: true
+      # optional list (comma separated) of allowed paths (ant matcher expressions) to skip JWT token check (ex: actuator health paths)
+      allowedPaths: "/actuator/health/*,/status"
+
+# ArgoCD SyncWave configuration. This Resource will be deployed with syncWave 1, after the resources with syncWave 0.
+argocd:
+  syncWave: "1"
+
+# url to the IAA AuthenticationProvider internal service
+authenticationProvider:
+  service:
+    url: http://authentication-provider.gaiax-edc-dev-sd.svc.cluster.local:8080
+
+# url to the connector adapter internal service
+connectorAdapter:
+  service:
+    url: http://edc-connector-adapter-provider.gaiax-edc-dev-sd.svc.cluster.local:8080
+
+# catalog adapter application (catalogue-adapter-service)
+catalogueAdapter:
+  tier2Gateway:
+    # URI to the tier2 tls gateway of the catalog adapter application
+    url: https://t2.gaiax-edc-dev-catalogue.dev.simpl-europe.eu
+    # tier2 tls gateway path configured as route rule to the catalog adapter application
+    pathPrefix: /catalogue-adapter-service
+
+# federated catalog application (fc-service)
+federatedCatalogue:
+  tier2Gateway:
+    # url to the tier2 gateway for the federated catalog service
+    url: https://t2.gaiax-edc-dev-catalogue.dev.simpl-europe.eu
+    # tier2 gateway path configured as route rule for the federated catalog service
+    pathPrefix: /fc-service
+
+# configuration for generating hash values
+hash:
+  config:
+    algorithm: "SHA256"
+    templates: '[
+                  {
+                    "key": "Contract Template 1",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/contract/ContractTemplate1.json"
+                  },
+                  {
+                    "key": "Contract Template 2",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/contract/ContractTemplate2.json"
+                  },
+                  {
+                    "key": "Contract Template 3",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/contract/ContractTemplate3.json"
+                  },
+                  {
+                    "key": "Billing Schema 1",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/BillingSchema1.pdf"
+                  },
+                  {
+                    "key": "Billing Schema 2",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/BillingSchema2.pdf"
+                  },
+                  {
+                    "key": "Billing Schema 3",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/BillingSchema1.pdf"
+                  },
+                  {
+                    "key": "Sla Agreements 1",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/SLAAgreement1.pdf"
+                  },
+                  {
+                    "key": "Sla Agreements 2",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/SLAAgreement2.pdf"
+                  },
+                  {
+                    "key": "Sla Agreements 3",
+                    "value": "https://files.dataprovider01.sandbox-cat-dat.simpl-europe.eu/static/pdf/SLAAgreement1.pdf"
+                  }
+                ]'
+    models: '[
+                {
+                  "hashObj": "contractTemplate",
+                  "hashDoc": "contractTemplateDocument",
+                  "hashAlg": "contractTemplateHashAlg",
+                  "hashValue": "contractTemplateHashValue",
+                  "hashUrl": "contractTemplateURL"
+                },
+                {
+                  "hashObj": "billingSchema",
+                  "hashDoc": "billingSchemaDocument",
+                  "hashAlg": "billingSchemaHashAlg",
+                  "hashValue": "billingSchemaHashValue",
+                  "hashUrl": "billingSchemaURL"
+                },
+                {
+                  "hashObj": "slaAgreements",
+                  "hashDoc": "slaAgreementsDocument",
+                  "hashAlg": "slaAgreementsHashAlg",
+                  "hashValue": "slaAgreementsHashValue",
+                  "hashUrl": "slaAgreementsURL"
+                }
+              ]'
+
+#Configure values of offering type based on shape files name
+offeringType:
+  config:
+    templates: '[
+                  {
+                    "key": "application-offeringShape",
+                    "value": "application"
+                  },
+                  {
+                    "key": "data-offeringShape",
+                    "value": "data"
+                  },
+                  {
+                    "key": "infrastructure-offeringShape",
+                    "value": "infrastructure"
+                  }
+                ]'

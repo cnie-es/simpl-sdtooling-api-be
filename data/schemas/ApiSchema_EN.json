@@ -1,0 +1,8 @@
+{
+  "id":"ApiSchema_EN",
+  "name": "API REST",
+  "title": "API REST",
+  "description": "Schema for API offerings in the edval dataspace",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

@@ -1,0 +1,8 @@
+{
+  "id":"ApiSchema_GL",
+  "name": "API REST",
+  "title": "API REST",
+  "description": "Esquema para ofertas de tipo API REST no dataspace de edval",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

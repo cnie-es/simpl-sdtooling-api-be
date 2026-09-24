@@ -1,0 +1,8 @@
+{
+  "id":"ModelSchema_EN",
+  "name": "Model",
+  "title": "Model",
+  "description": "Schema for model offerings in the edval dataspace",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

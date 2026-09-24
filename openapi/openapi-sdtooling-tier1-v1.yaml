@@ -1,0 +1,1801 @@
+info:
+  title: SD Tooling API
+  description: |-
+    The APIs described in the following document enable the management
+    of the lifecycle for creating a Resource Description on the provider side, including
+    its publication on the federated catalogue. The available APIs allow to define
+    access and usage policies, specify the Resource Address on the provider side,
+    and manage the validation and publication process on the federated catalogue.
+
+    ## Business Context
+
+    The API facilitates the creation and management of Resource Descriptions in a federated data space. It enables providers to publish metadata about their data assets on a federated catalogue, define access and usage policies, and manage the validation and publication workflow. This supports discoverability and interoperability across the data ecosystem.
+
+
+    ### Key Actors
+
+    - **Provider**: Creates and publishes Resource Descriptions, defines policies, and manages validation.
+
+    - **Governance Authority**: Hosts the Federated Catalogue
+
+    ### Typical Flow
+
+    1. Create a Resource Description.
+
+    2. Define access and usage policies.
+
+    3. Specify the Resource Address.
+
+    4. Submit the Resource Description for validation
+
+    5. Publish the Resource Description on the federated catalogue
+  contact:
+    name: Simpl Programme
+    url: https://simpl-programme.ec.europa.eu/
+    email: cnect-simpl@ec.europa.eu
+  license:
+    name: European Union Public License (EUPL) 1.2
+    url: https://interoperable-europe.ec.europa.eu/sites/default/files/custom-page/attachment/eupl_v1.2_en.pdf
+  version: "1.0"
+servers:
+- url: https://creation-wizard-api.dev.simpl-europe.eu/v1
+security:
+- bearerAuth: []
+openapi: 3.0.1
+tags:
+- name: Schema
+  description: |+
+    **DEPRECATED: All controller endpoints are deprecated since v1.22.0 and will be removed in a future version.**
+
+    **Please use the V2 version of this controller**
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: IAA cloud gateway JWT token
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    OdrlAssignee:
+      type: object
+      properties:
+        uid:
+          type: string
+        role:
+          type: string
+    UsagePolicyPermission:
+      required:
+      - assignee
+      - constraints
+      type: object
+      properties:
+        assignee:
+          minLength: 1
+          type: string
+          description: permission assignee
+          example: Consumer
+        action:
+          type: string
+          description: type of permission action (default USE)
+          enum:
+          - USE
+          - DO_NOT_USE_THIS_TYPE
+        constraints:
+          minItems: 1
+          type: array
+          description: permission contraints
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/DeletionConstraint'
+            - $ref: '#/components/schemas/RestrictedDurationConstraint'
+            - $ref: '#/components/schemas/RestrictedNumberConstraint'
+      description: usage permissions
+    UsagePolicyRequest:
+      required:
+      - permissions
+      type: object
+      properties:
+        permissions:
+          minItems: 1
+          type: array
+          description: usage permissions
+          items:
+            $ref: '#/components/schemas/UsagePolicyPermission'
+    InputObject:
+      type: object
+      properties:
+        in:
+          type: string
+          enum:
+          - body
+          - path
+          - query
+          - header
+        name:
+          type: string
+        value:
+          type: object
+    IdentityAttribute:
+      type: object
+      properties:
+        identifier:
+          type: string
+        code:
+          type: string
+    PolicyAction:
+      type: object
+      properties:
+        label:
+          type: string
+        value:
+          type: string
+    DeletionConstraint:
+      required:
+      - type
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsagePolicyConstraint'
+      - type: object
+        properties:
+          type:
+            type: string
+            description: type of the constraint
+            example: Deletion
+          afterUse:
+            type: boolean
+            description: after use flag (default is false)
+    RestrictedNumberConstraint:
+      required:
+      - maxCount
+      - type
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsagePolicyConstraint'
+      - type: object
+        properties:
+          type:
+            type: string
+            description: type of the constraint
+            example: RestrictedNumber
+          maxCount:
+            minimum: 1
+            exclusiveMinimum: false
+            type: integer
+            description: restricted number max usage count
+            format: int32
+            example: 10
+    OdrlAssigner:
+      type: object
+      properties:
+        uid:
+          type: string
+        role:
+          type: string
+    ResourceAddress:
+      required:
+      - value
+      type: object
+      properties:
+        templateId:
+          type: string
+        value:
+          type: string
+    InputValidationIssue:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        detail:
+          type: string
+        in:
+          type: string
+          enum:
+          - body
+          - path
+          - query
+          - header
+        name:
+          type: string
+        value:
+          type: object
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputObject'
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    Template:
+      type: object
+      properties:
+        id:
+          type: string
+        label:
+          type: string
+    AccessPolicyRequest:
+      required:
+      - permissions
+      type: object
+      properties:
+        permissions:
+          minItems: 1
+          type: array
+          description: access permissions
+          items:
+            $ref: '#/components/schemas/AccessPolicyPermission'
+    InternalServerErrorProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    NotFoundProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    UnauthorizedProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    BadRequestProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputValidationIssue'
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    UsagePolicyConstraint:
+      type: object
+      properties:
+        type:
+          type: string
+      description: permission contraints
+      discriminator:
+        propertyName: type
+    OdrlPermission:
+      type: object
+      properties:
+        target:
+          type: string
+        assignee:
+          $ref: '#/components/schemas/OdrlAssignee'
+        action:
+          type: array
+          items:
+            type: string
+        constraint:
+          type: array
+          items:
+            $ref: '#/components/schemas/OdrlConstraint'
+    OdrlConstraint:
+      type: object
+      properties:
+        leftOperand:
+          type: string
+        operator:
+          type: string
+        rightOperand:
+          type: string
+    OdrlPolicy:
+      type: object
+      properties:
+        profile:
+          type: string
+        target:
+          type: string
+        assigner:
+          $ref: '#/components/schemas/OdrlAssigner'
+        uid:
+          type: string
+        '@context':
+          type: string
+        '@type':
+          type: string
+        permission:
+          type: array
+          items:
+            $ref: '#/components/schemas/OdrlPermission'
+    RestrictedDurationConstraint:
+      required:
+      - type
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UsagePolicyConstraint'
+      - type: object
+        properties:
+          type:
+            type: string
+            description: type of the constraint
+            example: RestrictedDuration
+          fromDatetime:
+            type: string
+            description: duration start datetime in ISO8601 format with optional timezone (default is GMT)
+            example: 2024-08-01T00:00:00Z
+          toDatetime:
+            type: string
+            description: duration end datetime in ISO8601 format with optional timezone (default is GMT)
+            example: 2024-08-31T23:59:59Z
+    AccessPolicyPermission:
+      required:
+      - action
+      - assignee
+      type: object
+      properties:
+        assignee:
+          minLength: 1
+          type: string
+          description: permission assignee
+        action:
+          type: string
+          description: type of permission action
+          enum:
+          - SEARCH
+          - CONSUME
+          - RESTRICTED_CONSUME
+        fromDatetime:
+          type: string
+          description: permission start datetime in ISO8601 format with optional timezone (default is GMT)
+          example: 2024-08-01T00:00:00Z
+        toDatetime:
+          type: string
+          description: permission end datetime in ISO8601 format with optional timezone (default is GMT)
+          example: 2024-08-31T23:59:59Z
+      description: access permissions
+paths:
+  /schemas/{schemaId}/content:
+    get:
+      tags:
+      - Schema
+      summary: Returns schema content based on schemaId
+      description: Returns schema content for the specified schema identifier.
+      operationId: getSchemaContent
+      parameters:
+      - name: schemaId
+        in: path
+        description: Identifier of the TTL schema
+        required: true
+        schema:
+          type: string
+          description: Identifier of the TTL schema
+          example: data-offeringShape.ttl
+        example: data-offeringShape.ttl
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: TTL schema file content
+          content:
+            text/turtle:
+              schema:
+                type: string
+              examples:
+                ttlExample:
+                  summary: Example TTL content
+                  description: ttlExample
+                  value: '@prefix ex: <http://example.org/> .'
+      deprecated: true
+  /policies/usage:
+    post:
+      tags:
+      - Policy
+      summary: Generate a usage policy in ODRL format
+      description: This endpoint receives a request with usage permissions and returns an ODRL policy, which specifies how a resource can be used, by whom, and with what constraints
+      operationId: getUsagePolicyJsonLD
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsagePolicyRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: The usage policy json-ld
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OdrlPolicy'
+              examples:
+                validTypes:
+                  summary: Valid sharing methods
+                  description: validTypes
+                  value:
+                    '@context': http://www.w3.org/ns/odrl.jsonld
+                    '@type': Set
+                    profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                    target: ""
+                    assigner:
+                      uid: provider
+                      role: http://www.w3.org/ns/odrl/2/assigner
+                    uid: f5cb3167-cd29-4d1d-a0f2-4889caf7c875
+                    permission:
+                    - target: ""
+                      assignee:
+                        uid: consumer
+                        role: http://www.w3.org/ns/odrl/2/assignee
+                      action:
+                      - http://www.w3.org/ns/odrl/2/use
+                      constraint:
+                      - leftOperand: http://www.w3.org/ns/odrl/2/count
+                        operator: http://www.w3.org/ns/odrl/2/lteq
+                        rightOperand: "10"
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/gteq
+                        rightOperand: 2024-08-01T00:00:00Z
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/lteq
+                        rightOperand: 2024-08-31T23:59:59Z
+  /selfDescriptions/publications:
+    post:
+      tags:
+      - Self Description
+      summary: Publish an enriched, validated and signed self-description
+      description: Publishes a finalized (enriched, validated and signed) SD json-LD into the federated catalogue
+      operationId: publish
+      requestBody:
+        description: Request body containing SD JSON-LD object
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                '@context': http://www.w3.org/ns/odrl.jsonld
+                '@type': Set
+                assigner:
+                  role: http://www.w3.org/ns/odrl/2/assigner
+                  uid: provider
+                permission:
+                - action:
+                  - http://simpl.eu/odrl/actions/search
+                  assignee:
+                    role: http://www.w3.org/ns/odrl/2/assignee
+                    uid: CONSUMER
+                  constraint:
+                  - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                    operator: http://www.w3.org/ns/odrl/2/gteq
+                    rightOperand: 2024-08-01T00:00:00Z
+                  - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                    operator: http://www.w3.org/ns/odrl/2/lteq
+                    rightOperand: 2024-08-31T23:59:59Z
+                  target: ""
+                profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                target: ""
+                uid: 68777919-f260-4305-9c41-d4266ac0a639
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    instance: /selfDescriptions/publications
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The json-file is not valid
+                      in: body
+                      name: json-file
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+                    instance: /selfDescriptions/publications
+        "200":
+          description: Successfully published
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                Registration json:
+                  description: Registration json
+                  value:
+                    id: did:web:registry.gaia-x.eu:DataOffering:3mwO1pOqDQ_fID9jc9Az1TS5JKIS_eng_0006
+                    issuer: did:web:did.dev.simpl-europa.eu
+                    sdHash: 937295562072eb29046b8eb739eaa796144c9e9fa909b635dc5d0ce7b5ad5e27
+                    status: active
+                    statusDatetime: 2025-03-13T09:41:11.103238436Z
+                    uploadDatetime: 2025-03-13T09:41:11.103238376Z
+        "406":
+          description: Not Acceptable
+          content:
+            application/problem+json:
+              examples:
+                Not Acceptable Error Example:
+                  description: Not Acceptable Error Example
+                  value:
+                    type: urn:problem-type:simpl:notAcceptable
+                    title: Not Acceptable
+                    status: 406
+                    detail: The requested media type could not be provided
+                    instance: /selfDescriptions/publish
+        "415":
+          description: Unsupported Media Type
+          content:
+            application/problem+json:
+              examples:
+                Unsupported Media Type Error Example:
+                  description: Unsupported Media Type Error Example
+                  value:
+                    type: urn:problem-type:simpl:unsupportedMediaType
+                    title: Unsupported Media Type
+                    status: 415
+                    detail: The media type in the request payload is unsupported
+                    instance: /selfDescriptions/publish
+  /selfDescriptions/enriched:
+    post:
+      tags:
+      - Self Description
+      summary: Enriches and validates a self-description using the provided metadata and additional properties
+      description: |
+        **DEPRECATED: This endpoint is deprecated since v1.22.0 and will be removed in a future version.**
+
+        **Please use the V2 version of this endpoint**
+
+        ---
+
+        Adds hashing, registers asset and policies into the provider EDC, creates a contract definition on EDC connector and validates the resulting SD json enriched with all info. Allows passing additional properties via a JSON string.
+      operationId: enrichAndValidate
+      parameters:
+      - name: schemaId
+        in: query
+        description: schemaId
+        required: true
+        schema:
+          type: string
+        example: data-offeringShape.ttl
+      - name: templateId
+        in: query
+        description: resource address template id
+        required: true
+        schema:
+          type: string
+        example: 1
+      requestBody:
+        description: Request body containing SD JSON-LD
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                '@context': http://www.w3.org/ns/odrl.jsonld
+                '@type': Set
+                assigner:
+                  role: http://www.w3.org/ns/odrl/2/assigner
+                  uid: provider
+                permission:
+                - action:
+                  - http://simpl.eu/odrl/actions/search
+                  assignee:
+                    role: http://www.w3.org/ns/odrl/2/assignee
+                    uid: CONSUMER
+                  constraint:
+                  - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                    operator: http://www.w3.org/ns/odrl/2/gteq
+                    rightOperand: 2024-08-01T00:00:00Z
+                  - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                    operator: http://www.w3.org/ns/odrl/2/lteq
+                    rightOperand: 2024-08-31T23:59:59Z
+                  target: ""
+                profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                target: ""
+                uid: 68777919-f260-4305-9c41-d4266ac0a639
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The schemaId parameter must meet specific criteria
+                      in: query
+                      name: schemaId
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+                    instance: /selfDescriptions/enriched
+        "200":
+          description: Successfully enriched and validated SD JSON-LD
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                SD json file enriched and validated:
+                  description: SD json file enriched and validated
+                  value:
+                    '@context': http://www.w3.org/ns/odrl.jsonld
+                    '@type': Set
+                    assigner:
+                      role: http://www.w3.org/ns/odrl/2/assigner
+                      uid: provider
+                    permission:
+                    - action:
+                      - http://simpl.eu/odrl/actions/search
+                      assignee:
+                        role: http://www.w3.org/ns/odrl/2/assignee
+                        uid: CONSUMER
+                      constraint:
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/gteq
+                        rightOperand: 2024-08-01T00:00:00Z
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/lteq
+                        rightOperand: 2024-08-31T23:59:59Z
+                      target: ""
+                    profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                    target: ""
+                    uid: 68777919-f260-4305-9c41-d4266ac0a639
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              examples:
+                Unauthorized Error Example:
+                  description: Unauthorized Error Example
+                  value:
+                    type: urn:problem-type:simpl:unauthorized
+                    title: Unauthorized
+                    status: 401
+                    detail: Missing or invalid Authorization header
+                    instance: /selfDescriptions/enriched
+        "406":
+          description: Not Acceptable
+          content:
+            application/problem+json:
+              examples:
+                Not Acceptable Error Example:
+                  description: Not Acceptable Error Example
+                  value:
+                    type: urn:problem-type:simpl:notAcceptable
+                    title: Not Acceptable
+                    status: 406
+                    detail: The requested media type could not be provided
+                    instance: /selfDescriptions/enriched
+        "415":
+          description: Unsupported Media Type
+          content:
+            application/problem+json:
+              examples:
+                Unsupported Media Type Error Example:
+                  description: Unsupported Media Type Error Example
+                  value:
+                    type: urn:problem-type:simpl:unsupportedMediaType
+                    title: Unsupported Media Type
+                    status: 415
+                    detail: The media type in the request payload is unsupported
+                    instance: /selfDescriptions/enriched
+      deprecated: true
+  /resourceAddresses/templates/{templateId}/schema:
+    get:
+      tags:
+      - Resource Address
+      summary: Returns a source address template schema based on templateId
+      description: Returns a template (JSON schema) describing the fields and constraints to create the sourceAddress.
+      operationId: getSourceAddressSchema
+      parameters:
+      - name: templateId
+        in: path
+        description: The template id
+        required: true
+        schema:
+          type: string
+          example: TPL-1
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    instance: /resourceAddresses/templates/{templateId}/schema
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The templateId parameter must meet specific criteria
+                      in: path
+                      name: templateId
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                InternalServerError:
+                  summary: Unexpected internal error
+                  description: InternalServerError
+                  value:
+                    type: internal-error
+                    title: Unexpected internal error
+                    status: 500
+                    detail: 'GENERAL_ERROR: Please try again later'
+                    instance: /resourceAddresses/templates/{templateId}/schema
+        "200":
+          description: Template (JSON schema) for the sourceAddress
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                IonosS3:
+                  summary: IonosS3 template example
+                  description: IonosS3
+                  value:
+                    type: object
+                    properties:
+                      bucketName:
+                        type: string
+                      region:
+                        type: string
+                    required:
+                    - bucketName
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                NotFound:
+                  summary: Resource not found
+                  description: NotFound
+                  value:
+                    type: resource-not-found
+                    title: RESOURCE_ADDRESS_NOT_FOUND
+                    status: 404
+                    detail: UI schema not found
+                    instance: /resourceAddresses/templates/{templateId}/schema
+  /resourceAddresses/assets/{assetId}:
+    get:
+      tags:
+      - Resource Address
+      summary: Retrieves the resource address associated to the given assetId
+      description: Retrieves the resource address associated to the given assetId
+      operationId: getResourceAddress
+      parameters:
+      - name: assetId
+        in: path
+        description: Identifier of asset within connector
+        required: true
+        schema:
+          type: string
+          example: 123
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+                    instance: /resourceAddresses/assets/{assetId}
+        "200":
+          description: Successfully retrieved the resource address associated to the given assetId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceAddress'
+              examples:
+                Resource Address:
+                  description: Resource description address to the given assetId
+                  value:
+                    templateId: "5"
+                    value: '{"type":"MinioS3","endpoint":"https://minio01.integrated.simpl-europe.eu","bucketName":"provider-bucket","objectName":"example-s3.txt"}'
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedProblem'
+              examples:
+                Unauthorized:
+                  summary: Missing or invalid authorization
+                  description: Unauthorized
+                  value:
+                    type: unauthorized
+                    title: Unauthorized
+                    status: 401
+                    detail: Missing or invalid Authorization header
+                    instance: /resourceAddresses/assets/{assetId}
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                Not found Error Example:
+                  summary: AssetId Not Found
+                  description: Not found Error Example
+                  value:
+                    type: urn:problem-type:simpl:resourceAddressNotFound
+                    title: Resource Address Not Found
+                    status: 404
+                    detail: No resource address found for assetId
+                    instance: /resourceAddresses/assets/{assetId}
+  /policies/access:
+    post:
+      tags:
+      - Policy
+      summary: Generate an access policy in ODRL format
+      description: This endpoint receives a request containing a list of access permissions and returns an ODRL policy. The policy defines who can access a resource, with what type of action (e.g., SEARCH, CONSUME) and within what time frame
+      operationId: getAccessPolicyJsonLD
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessPolicyRequest'
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: The access policy json-ld
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OdrlPolicy'
+              examples:
+                validTypes:
+                  summary: Valid sharing methods
+                  description: validTypes
+                  value:
+                    '@context': http://www.w3.org/ns/odrl.jsonld
+                    '@type': Set
+                    profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                    target: ""
+                    assigner:
+                      uid: provider
+                      role: http://www.w3.org/ns/odrl/2/assigner
+                    uid: 68777919-f260-4305-9c41-d4266ac0a639
+                    permission:
+                    - target: ""
+                      assignee:
+                        uid: CONSUMER
+                        role: http://www.w3.org/ns/odrl/2/assignee
+                      action:
+                      - http://simpl.eu/odrl/actions/search
+                      constraint:
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/gteq
+                        rightOperand: 2024-08-01T00:00:00Z
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/lteq
+                        rightOperand: 2024-08-31T23:59:59Z
+                    - target: ""
+                      assignee:
+                        uid: CONSUMER
+                        role: http://www.w3.org/ns/odrl/2/assignee
+                      action:
+                      - http://simpl.eu/odrl/actions/consume
+                      constraint:
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/gteq
+                        rightOperand: 2024-08-01T00:00:00Z
+                    - target: ""
+                      assignee:
+                        uid: RESEARCHER
+                        role: http://www.w3.org/ns/odrl/2/assignee
+                      action:
+                      - http://simpl.eu/odrl/actions/restrictedConsume
+                      constraint:
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/gteq
+                        rightOperand: 2024-09-01T00:00:00Z
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/lteq
+                        rightOperand: 2024-10-30T23:59:59Z
+  /resourceAddresses/sharingMethods:
+    get:
+      tags:
+      - Resource Address
+      summary: Returns the list of sharing methods by offer type.
+      description: Returns the list of sharing methods mapped to the required offer type (DATA, APPLICATION, INFRASTRUCTURE).
+      operationId: getResourceSharingMethods
+      parameters:
+      - name: offeringType
+        in: query
+        description: The offering type identifier
+        required: true
+        schema:
+          type: string
+          enum:
+          - APPLICATION
+          - DATA
+          - INFRASTRUCTURE
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    instance: /resourceAddresses/sharingMethods
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The offeringType parameter must         meet specific criteria
+                      in: query
+                      name: offeringType
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                InternalServerError:
+                  summary: Unexpected internal error
+                  description: InternalServerError
+                  value:
+                    type: internal-error
+                    title: Unexpected internal error
+                    status: 500
+                    detail: 'GENERAL_ERROR: Please try again later'
+                    instance: /resourceAddresses/sharingMethods
+        "200":
+          description: A list of sharing methods
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                validTypes:
+                  summary: Valid sharing methods
+                  description: validTypes
+                  value:
+                  - IONOS_S3
+                  - HTTPDATA_PUSH
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedProblem'
+              examples:
+                Unauthorized:
+                  summary: Missing or invalid authorization
+                  description: Unauthorized
+                  value:
+                    type: unauthorized
+                    title: Unauthorized
+                    status: 401
+                    detail: Missing or invalid Authorization header
+                    instance: /resourceAddresses/sharingMethods
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                NotFound:
+                  summary: Resource not found
+                  description: NotFound
+                  value:
+                    type: resource-not-found
+                    title: RESOURCE_ADDRESS_NOT_FOUND
+                    status: 404
+                    detail: UI schema not found
+                    instance: /resourceAddresses/sharingMethods
+  /resourceAddresses/sharingMethods/{sharingMethodId}/templates:
+    get:
+      tags:
+      - Resource Address
+      summary: Returns the list of source address templates by sharing method and offering type.
+      description: Returns the list of templates mapped to the required sharing method and offering type (DATA, APPLICATION, INFRASTRUCTURE).
+      operationId: getSourceAddressTemplates
+      parameters:
+      - name: offeringType
+        in: query
+        description: The offering type identifier
+        required: true
+        schema:
+          type: string
+          enum:
+          - APPLICATION
+          - DATA
+          - INFRASTRUCTURE
+      - name: sharingMethodId
+        in: path
+        description: The resource sharing method identifier
+        required: true
+        schema:
+          type: string
+          enum:
+          - HTTPDATA_PUSH
+          - IONOS_S3
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    instance: /resourceAddresses/sharingMethods/{sharingMethodId}/templates
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The sharingMethodId parameter must meet specific criteria
+                      in: path
+                      name: sharingMethodId
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                InternalServerError:
+                  summary: Unexpected internal error
+                  description: InternalServerError
+                  value:
+                    type: internal-error
+                    title: Unexpected internal error
+                    status: 500
+                    detail: 'GENERAL_ERROR: Please try again later'
+                    instance: /resourceAddresses/sharingMethods/{sharingMethodId}/templates
+        "200":
+          description: A list of templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Template'
+              examples:
+                templates:
+                  summary: List of templates
+                  description: templates
+                  value:
+                  - id: TPL-1
+                    label: TPL 1
+                  - id: TPL-2
+                    label: TPL 2
+                  - id: TPL-3
+                    label: TPL 3
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedProblem'
+              examples:
+                Unauthorized:
+                  summary: Missing or invalid authorization
+                  description: Unauthorized
+                  value:
+                    type: unauthorized
+                    title: Unauthorized
+                    status: 401
+                    detail: Missing or invalid Authorization header
+                    instance: /resourceAddresses/sharingMethods/{sharingMethodId}/templates
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                NotFound:
+                  summary: Resource not found
+                  description: NotFound
+                  value:
+                    type: resource-not-found
+                    title: RESOURCE_ADDRESS_NOT_FOUND
+                    status: 404
+                    detail: Template not found
+                    instance: /resourceAddresses/sharingMethods/{sharingMethodId}/templates
+  /resourceDescriptions/{resourceDescriptionId}:
+    get:
+      tags:
+      - Resource Description
+      summary: Return details of given resource description stored in federated catalogue
+      operationId: getResourceDescription
+      parameters:
+      - name: resourceDescriptionId
+        in: path
+        description: Resource description identifier (credentialSubject.@id)
+        required: true
+        schema:
+          type: string
+          example: did:web:registry.gaia-x.eu:DataOffering:123
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+              examples:
+                returnValidResponse:
+                  description: returnValidResponse
+                  value:
+                    claimsGraphUri:
+                    - did:web:registry.gaia-x.eu:InfrastructureOffering:a94ef06c-a12d-4308-89aa-fffcd8a61126
+                    offeringType: infrastructure
+                    name: text title for infrastructure resource.
+                    inLanguage: da
+                    description: text description
+                    serviceAccessPoint: http://serviceaccesspoint.com
+  /resourceDescriptions/{resourceDescriptionId}/revoke:
+    post:
+      tags:
+      - Resource Description
+      summary: Revoke an already published self-description from the federated catalogue
+      description: |
+        Revokes a previously published resource description.
+        After revocation, the self-description shall no longer be visible or discoverable in the federated catalogue.
+      operationId: revokeResourceDescription
+      parameters:
+      - name: resourceDescriptionId
+        in: path
+        description: Resource description identifier (credentialSubject.@id)
+        required: true
+        schema:
+          type: string
+          example: did:web:registry.gaia-x.eu:DataOffering:123
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                BadRequestExample:
+                  description: BadRequestExample
+                  value:
+                    type: urn:problem-type:simpl:badRequest
+                    title: BadRequest
+                    status: 400
+                    instance: /resourceDescriptions/{resourceDescriptionId}/revoke
+                    detail: Invalid resourceDescriptionId format
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                InternalServerErrorExample:
+                  description: InternalServerErrorExample
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    instance: /resourceDescriptions/{resourceDescriptionId}/revoke
+                    detail: Unexpected internal error
+        "200":
+          description: Successfully revoked self-description
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                RevokeSuccess:
+                  description: RevokeSuccess
+                  value:
+                    id: did:web:registry.gaia-x.eu:DataOffering:3mwO1...
+                    status: revoked
+                    statusDatetime: 2025-03-20T10:31:00Z
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                NotFoundExample:
+                  description: NotFoundExample
+                  value:
+                    type: resource-not-found
+                    title: RESOURCE_DESCRIPTION_NOT_FOUND
+                    status: 404
+                    instance: /resourceDescriptions/{resourceDescriptionId}/revoke
+                    detail: Resource description not found or already revoked
+  /resourceDescriptions:
+    get:
+      tags:
+      - Resource Description
+      summary: Return all resource descriptions with the participant id as defined in the Client access token.
+      operationId: getAllResourceDescriptions
+      parameters:
+      - name: orderBy
+        in: query
+        description: Field to order the results by
+        required: false
+        schema:
+          type: string
+          description: Field to order the results by
+          example: publicationDate
+          default: publicationDate
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                returnValidResponse:
+                  description: returnValidResponse
+                  value:
+                    totalCount: 1
+                    items:
+                    - "n":
+                        claimsGraphUri:
+                        - did:web:registry.gaia-x.eu:InfrastructureOffering:a94ef06c-a12d-4308-89aa-fffcd8a61126
+                        offeringType: infrastructure
+                        name: text title for infrastructure resource.
+                        inLanguage: da
+                        description: text description
+                        serviceAccessPoint: http://serviceaccesspoint.com
+  /resourceAddresses/templates/{templateId}/uiSchema:
+    get:
+      tags:
+      - Resource Address
+      summary: Returns a source address UI schema based in templateId.
+      description: Returns a UI schema that defines the constraints for the form representation of the sourceAddress.
+      operationId: getSourceAddressUiSchema
+      parameters:
+      - name: templateId
+        in: path
+        description: The template id
+        required: true
+        schema:
+          type: string
+          example: TPL-1
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    instance: /resourceAddresses/templates/{templateId}/uiSchema
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The templateId parameter must meet specific criteria
+                      in: path
+                      name: templateId
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                InternalServerError:
+                  summary: Unexpected internal error
+                  description: InternalServerError
+                  value:
+                    type: internal-error
+                    title: Unexpected internal error
+                    status: 500
+                    detail: 'GENERAL_ERROR: Please try again later'
+                    instance: /resourceAddresses/templates/{templateId}/uiSchema
+        "200":
+          description: UI schema for the sourceAddress
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                amazonS3UI:
+                  summary: UI schema example
+                  description: amazonS3UI
+                  value:
+                    ui:order:
+                    - bucketName
+                    - region
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                NotFound:
+                  summary: Resource not found
+                  description: NotFound
+                  value:
+                    type: resource-not-found
+                    title: RESOURCE_ADDRESS_NOT_FOUND
+                    status: 404
+                    detail: UI schema not found
+                    instance: /resourceAddresses/templates/{templateId}/uiSchema
+  /policies/identityAttributes:
+    get:
+      tags:
+      - Policy
+      summary: Retrieve identity attributes for consumers
+      description: Returns the identity attributes assigned to the CONSUMER type by the Governance Authority, useful for defining who can access a resource
+      operationId: getIdentityAttributes
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: A list of identity attributes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdentityAttribute'
+              examples:
+                validTypes:
+                  summary: Valid sharing methods
+                  description: validTypes
+                  value:
+                  - code: CONSUMER
+                    identifier: Consumer
+  /policies/actions:
+    get:
+      tags:
+      - Policy
+      summary: List of available actions for access policies
+      description: Returns all supported actions that can be used in the definition of an access policy, such as SEARCH, CONSUME, and RESTRICTED_CONSUME
+      operationId: getAccessPolicyActions
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: A list of access policy actions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAction'
+              examples:
+                validTypes:
+                  summary: Valid sharing methods
+                  description: validTypes
+                  value:
+                  - label: search
+                    value: SEARCH
+                  - label: consume
+                    value: CONSUME
+                  - label: restrictedConsume
+                    value: RESTRICTED_CONSUME
+  /schemas:
+    get:
+      tags:
+      - Schema
+      summary: List all available schema ids
+      description: Returns all schema identifiers in order to allow them to be selected and initiate the self-description creation process.
+      operationId: getSchemas
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Invalid payload
+                    status: 400
+                    detail: missing required arguments
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+        "200":
+          description: A map of available TTL schema files
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                Available TTL files:
+                  description: Available TTL files
+                  value:
+                    simpl:
+                      contract:
+                      - contract-templateShape.ttl
+                      service:
+                      - application-offeringShape.ttl
+                      - data-offeringShape.ttl
+                      - infrastructure-offeringShape.ttl
+      deprecated: true

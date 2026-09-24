@@ -1,0 +1,1099 @@
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix bcp47: <http://w3id.org/meta-share/bcp47/> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix continent: <http://publications.europa.eu/resource/authority/continent/> .
+@prefix country: <http://publications.europa.eu/resource/authority/country/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix dpv: <https://w3id.org/dpv#> .
+@prefix edval: <http://w3id.org/gaia-x/edval#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix gax-validation: <http://w3id.org/gaia-x/validation#> .
+@prefix it6: <http://data.europa.eu/it6/> .
+@prefix ms: <http://w3id.org/meta-share/meta-share/> .
+@prefix omtd: <http://w3id.org/meta-share/omtd-share/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix simpl: <http://w3id.org/gaia-x/simpl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+gax-validation:ModelOfferingShape a sh:NodeShape ;
+    sh:property [ skos:example "'(a structure object of type ms:MLModel with title, description, lrType, mediaType, lingualityType, language, etc.)'" ;
+            sh:description "Machine Learning Model metadata conforming to LanguageDCAT-AP profile for interoperability with the European Language Data Space. Includes title, description, language resource type, media type, linguality, language metadata, GDPR compliance properties, and distribution information." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "model asset" ;
+            sh:node gax-validation:MLModelShape ;
+            sh:order 1 ;
+            sh:path edval:modelAsset ],
+        [ skos:example "'true', 'false'" ;
+            sh:datatype xsd:boolean ;
+            sh:description "Indicates whether this language resource offering is publicly accessible (true) or restricted to authorized parties only (false)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "is public offering" ;
+            sh:order 2 ;
+            sh:path edval:isPublicOffering ],
+        [ skos:example "'(a structure object of type DataProperties'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "data properties" ;
+            sh:node gax-validation:DataPropertiesShape ;
+            sh:order 3 ;
+            sh:path simpl:dataProperties ],
+        [ skos:example "'(a structure object of type GeneralServiceProperties'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "general service properties" ;
+            sh:node gax-validation:GeneralServicePropertiesShape ;
+            sh:order 4 ;
+            sh:path simpl:generalServiceProperties ],
+        [ skos:example "'(a structure object of type AssetProperties'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "asset properties" ;
+            sh:node gax-validation:AssetPropertiesShape ;
+            sh:order 5 ;
+            sh:path simpl:assetProperties ],
+        [ skos:example "'(a structure object of type ProviderInformation'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "provider information" ;
+            sh:node gax-validation:ProviderInformationShape ;
+            sh:order 6 ;
+            sh:path simpl:providerInformation ],
+        [ skos:example "'(a structure object of type OfferingPrice'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "offering price" ;
+            sh:node gax-validation:OfferingPriceShape ;
+            sh:order 7 ;
+            sh:path simpl:offeringPrice ],
+        [ skos:example "'(a structure object of type ServicePolicy'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "service policy" ;
+            sh:node gax-validation:ServicePolicyShape ;
+            sh:order 8 ;
+            sh:path simpl:servicePolicy ],
+        [ skos:example "'(a structure object of type ContractTemplate'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template" ;
+            sh:node gax-validation:ContractTemplateShape ;
+            sh:order 9 ;
+            sh:path simpl:contractTemplate ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'(a structure object of type EdcRegistration'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "edc registration" ;
+            sh:node gax-validation:EdcRegistrationShape ;
+            sh:order 10 ;
+            sh:path simpl:edcRegistration ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'(a structure object of type EdcConnector'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "edc connector" ;
+            sh:node gax-validation:EdcConnectorShape ;
+            sh:order 11 ;
+            sh:path simpl:edcConnector ] ;
+    sh:targetClass edval:ModelOffering .
+
+gax-validation:AssetPropertiesShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "requiredOnFrontendOnly" ) ;
+            skos:example "'{ 'Json' : 'Object' }'" ;
+            sh:datatype xsd:string ;
+            sh:description "Provider Data address" ;
+            sh:maxCount 1 ;
+            sh:name "provider data address" ;
+            sh:order 1 ;
+            sh:path simpl:providerDataAddress ] ;
+    sh:targetClass simpl:AssetProperties .
+
+gax-validation:ContractTemplateShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Contract Template 1', 'Contract Template 2'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates Contract Template Document" ;
+            sh:in ( "Contract Template 1" "Contract Template 2" "Contract Template 3" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template document" ;
+            sh:order 1 ;
+            sh:path simpl:contractTemplateDocument ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Free text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates HASH VALUE" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template hash value" ;
+            sh:order 2 ;
+            sh:path simpl:contractTemplateHashValue ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Free text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates HASH ALGORITHM" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template hash alg" ;
+            sh:order 3 ;
+            sh:path simpl:contractTemplateHashAlg ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'URL'" ;
+            sh:datatype xsd:string ;
+            sh:description "URL" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template u r l" ;
+            sh:order 4 ;
+            sh:path simpl:contractTemplateURL ] ;
+    sh:targetClass simpl:ContractTemplate .
+
+gax-validation:DataPropertiesShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'http://provenanceURL.eu'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "Provenance" ;
+            sh:maxCount 1 ;
+            sh:name "produced by" ;
+            sh:order 1 ;
+            sh:path simpl:producedBy ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'csv, xml'" ;
+            sh:datatype xsd:string ;
+            sh:description "Format under which the data is distributed (e.g. csv, xml, …)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "format" ;
+            sh:order 2 ;
+            sh:path simpl:format ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'http://mysite/swagger-ui/index.html'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "Schema of the dataset, depends on the type of data for JSON it would be JSON Schema Description that states what fields the data has and the types." ;
+            sh:name "open api" ;
+            sh:order 3 ;
+            sh:path simpl:openApi ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'http://mysite/swagger-ui/index.html'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "Additional Information about the dataset" ;
+            sh:maxCount 1 ;
+            sh:name "additional info" ;
+            sh:order 4 ;
+            sh:path simpl:additionalInfo ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Related datasets" ;
+            sh:name "related datasets" ;
+            sh:order 5 ;
+            sh:path simpl:relatedDatasets ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Target users" ;
+            sh:name "target users" ;
+            sh:order 6 ;
+            sh:path simpl:targetUsers ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Data Quality (to include metrics such as completeness, accuracy, timeliness and other)" ;
+            sh:name "data quality" ;
+            sh:order 7 ;
+            sh:path simpl:dataQuality ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Encryption: Describes the encryption algorithms and keys used to secure the data" ;
+            sh:maxCount 1 ;
+            sh:name "encryption" ;
+            sh:order 8 ;
+            sh:path simpl:encryption ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Anonymization/pseudonymization: Indicates whether sensitive information has been anonymized or pseudonymized to protect privacy" ;
+            sh:maxCount 1 ;
+            sh:name "anonymization" ;
+            sh:order 9 ;
+            sh:path simpl:anonymization ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ] ;
+    sh:targetClass simpl:DataProperties .
+
+gax-validation:DistributionShape a sh:NodeShape ;
+    sh:property [ skos:example "'omtd:Csv', 'omtd:Json', 'omtd:Xml'" ;
+            sh:description "Data format of the distribution: an IRI from omtd:DataFormatScheme (e.g. omtd:Csv, omtd:Json, omtd:Xml)." ;
+            sh:in ( omtd:ANNIS omtd:AclAnthologyCorpusFormat omtd:AimedCorpusFormat omtd:Alto omtd:AlvisEnrichedDocumentFormat omtd:Anafora omtd:AnnotationFormat omtd:AudioFormat omtd:Avro_json omtd:BLAST omtd:BinaryCas omtd:BinaryFormat omtd:Bionlp omtd:BionlpFormat omtd:BionlpSt2013A1_a2 omtd:Blikiwikipedia omtd:BncFormat omtd:Brat omtd:CBOR omtd:Cadixe_json omtd:Chat omtd:Cochrane omtd:Conll2000 omtd:Conll2002 omtd:Conll2003 omtd:Conll2006 omtd:Conll2008 omtd:Conll2009 omtd:Conll2012 omtd:ConllFormat omtd:ConllU omtd:CorpusFormat omtd:Csv omtd:DatabaseFormat omtd:Datasift_json omtd:Diaml omtd:DkproTokenized omtd:DocumentFormat omtd:EAF omtd:Emma omtd:FactoredTagLemFormat omtd:FastInfoset omtd:Folia omtd:GateFormat omtd:GateXml omtd:Gate_twitter_json omtd:Graf omtd:Gzip omtd:Html omtd:Html5Microdata omtd:I2b2 omtd:ImageFormat omtd:Imscwb omtd:InlineXml omtd:Jdbc omtd:Json omtd:JsonL omtd:Json_genia omtd:Kaf omtd:KeaCorpus omtd:LD_json omtd:Latex omtd:LinkedDataFormat omtd:Lll omtd:MLModelFormat omtd:MOSESFormat omtd:MalletLdaTopicProportions omtd:MalletLdaTopicProportionsSorted omtd:MediaWikiMarkup omtd:MsAccessDatabase omtd:MsExcel omtd:MsExcel_xlsx omtd:MsPowerpoint omtd:MsWord omtd:MsWord_docx omtd:Naf omtd:NegraExport omtd:Nif omtd:ONNX omtd:OasisPresentation omtd:OasisSpreadsheet omtd:OasisText omtd:Obo omtd:OpenFormat omtd:OpenOfficeDocument omtd:OpenOfficePresentation omtd:OpenOfficeSpreadsheet omtd:Owl omtd:Owl_xml omtd:PackageFormat omtd:Pdf omtd:Pls omtd:Pml omtd:Postscript omtd:Ptb omtd:PtbChunked omtd:PtbCombined omtd:Pubmed omtd:RawAudioFormat omtd:RdfFormat omtd:Rdf_xml omtd:Reuters21578Sgml omtd:Reuters21578Txt omtd:Rtf omtd:SDL_tm_xliff omtd:SQL omtd:SerializedCas omtd:Sgml omtd:Solr omtd:TFSavedModel omtd:TabularFormat omtd:Tbx omtd:Tcf omtd:Tei omtd:Tex omtd:Text omtd:TextXML omtd:Tgrep2 omtd:Tgz omtd:TigerXml omtd:Tika omtd:Tmx omtd:Tsv omtd:Tuepp omtd:Turtle omtd:UimaCasFormat omtd:Uima_json omtd:VideoFormat omtd:WARC omtd:Web1t omtd:WebAnnotationFormat omtd:WikiFormat omtd:WikipediaArticle omtd:WikipediaArticleInfo omtd:WikipediaDiscussion omtd:WikipediaFormat omtd:WikipediaLink omtd:WikipediaPage omtd:WikipediaQuery omtd:WikipediaRevision omtd:WikipediaRevisionPair omtd:WikipediaTemplateFilteredArticle omtd:Xces omtd:XcesIlspVariant omtd:Xhtml omtd:Xmi omtd:Xml omtd:XmlBioc omtd:Xpath omtd:Zip omtd:aif omtd:avi omtd:basic omtd:bmp omtd:flac omtd:gif omtd:hdf5 omtd:jpg omtd:mleap omtd:mp3 omtd:mp4 omtd:mpg omtd:octetStream omtd:other omtd:pkl omtd:pmml omtd:png omtd:protoBuf omtd:protoBuf_Json omtd:svg omtd:tar omtd:tiff omtd:unspecified omtd:wav omtd:yaml omtd:xml ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "format" ;
+            sh:order 1 ;
+            sh:path dct:format ],
+        [ skos:example "'omtd:Zip', 'omtd:Gzip', 'omtd:Tgz'" ;
+            sh:description "Package/compression format (from omtd:PackageFormatScheme)." ;
+            sh:in ( omtd:Gzip omtd:Tgz omtd:Zip omtd:other omtd:tar omtd:unspecified omtd:zip ) ;
+            sh:maxCount 1 ;
+            sh:name "package format" ;
+            sh:order 2 ;
+            sh:path dcat:packageFormat ],
+        [ skos:example "'1048576', '524288000'" ;
+            sh:datatype xsd:integer ;
+            sh:description "Size of the distribution in bytes (must be positive)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "byte size" ;
+            sh:order 3 ;
+            sh:path dcat:byteSize ],
+        [ skos:example "'(a structure object of type SizeWithUnit with amount and sizeUnit)'" ;
+            sh:description "Human-readable size with unit." ;
+            sh:minCount 1 ;
+            sh:name "size" ;
+            sh:node gax-validation:SizeShape ;
+            sh:order 4 ;
+            sh:path ms:size ] ;
+    sh:targetClass dcat:Distribution .
+
+gax-validation:DocumentDocumentationGroup a sh:PropertyGroup ;
+    rdfs:label "Documentation" ;
+    sh:order 1 .
+
+gax-validation:DocumentShape a sh:NodeShape ;
+    sh:property [ skos:example "'Smith, J. et al. (2023). Spanish Legal Corpus v1.0. Journal of Language Resources.'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text citation for the documentation." ;
+            sh:group gax-validation:DocumentDocumentationGroup ;
+            sh:minCount 1 ;
+            sh:name "citation text" ;
+            sh:order 1 ;
+            sh:path ms:citationText ] ;
+    sh:targetClass foaf:Document .
+
+gax-validation:EdcConnectorShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'providerEndpointURL'" ;
+            sh:datatype xsd:string ;
+            sh:description "Provider endpoint url" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "provider endpoint u r l" ;
+            sh:order 1 ;
+            sh:path simpl:providerEndpointURL ] ;
+    sh:targetClass simpl:EdcConnector .
+
+gax-validation:EdcRegistrationShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of contract definition" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract definition id" ;
+            sh:order 1 ;
+            sh:path simpl:contractDefinitionId ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of service policy" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "service policy id" ;
+            sh:order 2 ;
+            sh:path simpl:servicePolicyId ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of access policy" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "access policy id" ;
+            sh:order 3 ;
+            sh:path simpl:accessPolicyId ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of asset" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "asset id" ;
+            sh:order 4 ;
+            sh:path simpl:assetId ] ;
+    sh:targetClass simpl:EdcRegistration .
+
+gax-validation:GeneralServicePropertiesShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Title'" ;
+            sh:datatype xsd:string ;
+            sh:description "A short text title for the dataset/application/infrastructure" ;
+            sh:maxCount 1 ;
+            sh:maxLength 255 ;
+            sh:minCount 1 ;
+            sh:minLength 1 ;
+            sh:name "name" ;
+            sh:order 1 ;
+            sh:path simpl:name ;
+            sh:pattern "^(.|\\s)*[a-zA-Z]+(.|\\s)*$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Description'" ;
+            sh:datatype xsd:string ;
+            sh:description "A description for the dataset/application/infrastructure" ;
+            sh:maxCount 1 ;
+            sh:maxLength 1000 ;
+            sh:minCount 1 ;
+            sh:minLength 1 ;
+            sh:name "description" ;
+            sh:order 2 ;
+            sh:path simpl:description ;
+            sh:pattern "^(.|\\s)*[a-zA-Z]+(.|\\s)*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'URL, handle'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "The location where the dataset/application/infrastructure can be found (likely an endpoint URL)" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "service access point" ;
+            sh:order 3 ;
+            sh:path simpl:serviceAccessPoint ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Keywords'" ;
+            sh:datatype xsd:string ;
+            sh:description "Keywords" ;
+            sh:maxCount 16 ;
+            sh:maxLength 50 ;
+            sh:minLength 1 ;
+            sh:name "keywords" ;
+            sh:order 4 ;
+            sh:path simpl:keywords ;
+            sh:pattern "^(.|\\s)*[a-zA-Z]+(.|\\s)*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'EN, IT'" ;
+            sh:datatype xsd:string ;
+            sh:description "Language (of the metadata, like the title, description)" ;
+            sh:in ( "es" "gl" "ca" "eu" "en" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "in language" ;
+            sh:order 5 ;
+            sh:path simpl:inLanguage ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'application, data, infrastructure'" ;
+            sh:datatype xsd:string ;
+            sh:description "Offering type using for search" ;
+            sh:in ( "application" "data" "infrastructure" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "offering type" ;
+            sh:order 6 ;
+            sh:path simpl:offeringType ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Id'" ;
+            sh:datatype xsd:string ;
+            sh:description "Sharing Method Id type using for Resource Address Template" ;
+            sh:maxCount 1 ;
+            sh:name "sharing method id" ;
+            sh:order 7 ;
+            sh:path simpl:sharingMethodId ] ;
+    sh:targetClass simpl:GeneralServiceProperties .
+
+gax-validation:LicenseDocumentShape a sh:NodeShape ;
+    sh:property [ skos:example "'Creative Commons Attribution 4.0 International'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable title of the license" ;
+            sh:minCount 1 ;
+            sh:name "title" ;
+            sh:order 1 ;
+            sh:path dct:title ],
+        [ skos:example "'Permite compartir y adaptar con atribución.'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable description of the license" ;
+            sh:minCount 1 ;
+            sh:name "description" ;
+            sh:order 2 ;
+            sh:path dct:description ],
+        [ skos:example "'https://creativecommons.org/licenses/by/4.0/legalcode'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "IRI of the legal code/full text of the license (cc:legalcode)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "legalcode" ;
+            sh:order 3 ;
+            sh:path cc:legalcode ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ skos:example "'(a structure object of type adms:Identifier with skos:notation and adms:schemaAgency)'" ;
+            sh:description "ADMS identifier(s) for the license document." ;
+            sh:name "identifier" ;
+            sh:node gax-validation:IdentifierShape ;
+            sh:order 4 ;
+            sh:path adms:identifier ] ;
+    sh:targetClass dct:LicenseDocument .
+
+gax-validation:MLModelDistributionGroup a sh:PropertyGroup ;
+    rdfs:label "Distribution" ;
+    sh:order 5 .
+
+gax-validation:MLModelDocumentationGroup a sh:PropertyGroup ;
+    rdfs:label "Documentation" ;
+    sh:order 13 .
+
+gax-validation:MLModelIntellectualPropertyRightsGroup a sh:PropertyGroup ;
+    rdfs:label "Intellectual Property Rights" ;
+    sh:order 10 .
+
+gax-validation:MLModelLanguageGroup a sh:PropertyGroup ;
+    rdfs:label "Language" ;
+    sh:order 3 .
+
+gax-validation:MLModelLicenseGroup a sh:PropertyGroup ;
+    rdfs:label "License" ;
+    sh:order 8 .
+
+gax-validation:MLModelPublisherGroup a sh:PropertyGroup ;
+    rdfs:label "Publisher" ;
+    sh:order 9 .
+
+gax-validation:MLModelShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'ms:MLModel'" ;
+            sh:description "Language resource type IRI (from ms:LRTypeTaxonomy)." ;
+            sh:in ( ms:MLModel ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "lr type" ;
+            sh:order 1 ;
+            sh:path ms:lrType ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Corpus Legal Español'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable title of the language resource" ;
+            sh:group gax-validation:MLModelBasicInformationGroup ;
+            sh:minCount 1 ;
+            sh:name "title" ;
+            sh:order 2 ;
+            sh:path dct:title ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Un corpus de documentos legales de tribunales españoles anotado con entidades nombradas'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable description of the resource content and purpose" ;
+            sh:group gax-validation:MLModelBasicInformationGroup ;
+            sh:minCount 1 ;
+            sh:name "description" ;
+            sh:order 3 ;
+            sh:path dct:description ],
+        [ skos:example "'1.0', '2.1.3'" ;
+            sh:datatype xsd:string ;
+            sh:description "Version identifier of the resource release." ;
+            sh:group gax-validation:MLModelBasicInformationGroup ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "version" ;
+            sh:order 4 ;
+            sh:path dcat:version ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'corpus', 'legal', 'español', 'NER'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Keywords describing the resource content and domain" ;
+            sh:group gax-validation:MLModelBasicInformationGroup ;
+            sh:maxCount 10 ;
+            sh:minCount 1 ;
+            sh:name "keyword" ;
+            sh:order 5 ;
+            sh:path dcat:keyword ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ms:text', 'ms:audio', 'ms:video'" ;
+            sh:description "Media type of the resource content (from ms:MediaTypeTaxonomy)." ;
+            sh:group gax-validation:MLModelBasicInformationGroup ;
+            sh:in ( ms:audio ms:image ms:text ms:textNumerical ms:video ) ;
+            sh:minCount 1 ;
+            sh:name "media type" ;
+            sh:order 6 ;
+            sh:path ms:mediaType ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ms:monolingual', 'ms:bilingual', 'ms:multilingual'" ;
+            sh:description "Indicates whether the resource is monolingual, bilingual or multilingual (from ms:LingualityTypeTaxonomy)." ;
+            sh:group gax-validation:MLModelBasicInformationGroup ;
+            sh:in ( ms:bilingual ms:bilingualized ms:monolingual ms:multilingual ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "linguality type" ;
+            sh:order 7 ;
+            sh:path ms:lingualityType ],
+        [ skos:example "'ES-Legal-Corpus'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Alternative title or acronym of the resource" ;
+            sh:group gax-validation:MLModelIdentificationGroup ;
+            sh:name "alternative" ;
+            sh:order 8 ;
+            sh:path dct:alternative ],
+        [ skos:example "'(a structure object of type adms:Identifier with skos:notation and adms:schemaAgency)'" ;
+            sh:description "ADMS identifier(s) for the resource (e.g., DOI, Handle, ISNI, ROR)." ;
+            sh:group gax-validation:MLModelIdentificationGroup ;
+            sh:name "identifier" ;
+            sh:node gax-validation:IdentifierShape ;
+            sh:order 9 ;
+            sh:path adms:identifier ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "" ;
+            sh:description "Meta-share Language metadata specifying the language(s) supported by the model (from ms:LanguageTaxonomy)." ;
+            sh:group gax-validation:MLModelLanguageGroup ;
+            sh:minCount 1 ;
+            sh:name "language" ;
+            sh:node gax-validation:LanguageShape ;
+            sh:order 10 ;
+            sh:path ms:language ],
+        [ skos:example "'ms:yesA', 'ms:noA', 'ms:unknownA'" ;
+            sh:description "Indicates whether the resource has been anonymized (from ms:AnonymizedTaxonomy)." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:in ( ms:noA ms:unknownA ms:yesA ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "anonymized" ;
+            sh:order 11 ;
+            sh:path ms:anonymized ],
+        [ skos:example "'ms:yesP', 'ms:noP', 'ms:unknownP'" ;
+            sh:description "Indicates whether the resource contains personal data as per GDPR (from ms:PersonalDataIncludedTaxonomy). Mandatory for GDPR compliance. Cannot be set if anonymized is yesA." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:in ( ms:noP ms:unknownP ms:yesP ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "personal data included" ;
+            sh:order 12 ;
+            sh:path ms:personalDataIncluded ],
+        [ skos:example "'dpv:Encryption', 'dpv:Pseudonymisation', 'dpv:AccessControlPolicy'" ;
+            sh:description "Technical or organisational measure applied to protect personal data (from ms:TechnicalOrganisationalMeasureTaxonomy). Required when personalDataIncluded is yesP." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:in ( ms:accessControlsAuthenticationMechanisms ms:dataBackupAndRecoveryProcedures ms:dataBreachNotificationMechanisms ms:dataRetentionAndDeletionPolicies ms:encryptionOfPersonalData ms:incidentResponseAndManagementProcedures ms:networkAndCommunicationSecurity ms:physicalSecurityMeasuresForPremisesAndEquipment ms:pseudonymisationOfPersonalData ms:staffTrainingOnDataProtectionAndSecurityAwareness ) ;
+            sh:name "has technical organisational measure" ;
+            sh:order 13 ;
+            sh:path dpv:hasTechnicalOrganisationalMeasure ],
+        [ skos:example "'Nombres y ubicaciones reemplazados con marcadores de posición utilizando spaCy NER'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of the anonymization process applied to the resource" ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:name "anonymization details" ;
+            sh:order 14 ;
+            sh:path ms:anonymizationDetails ],
+        [ skos:example "'ms:yesS', 'ms:noS', 'ms:unknownS'" ;
+            sh:description "Indicates whether the resource contains sensitive data (from ms:SensitiveDataIncludedTaxonomy). Mandatory for GDPR compliance. Cannot be set if anonymized is yesA." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:in ( ms:noS ms:unknownS ms:yesS ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "sensitive data included" ;
+            sh:order 15 ;
+            sh:path ms:sensitiveDataIncluded ],
+        [ skos:example "'Contiene registros de diagnósticos médicos'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of the sensitive data contained in the resource." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:name "sensitive data details" ;
+            sh:order 16 ;
+            sh:path ms:sensitiveDataDetails ],
+        [ skos:example "'Contiene nombres de textos biográficos anotados'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of the personal data contained in the resource." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:name "personal data details" ;
+            sh:order 17 ;
+            sh:path ms:personalDataDetails ],
+        [ skos:example "'ms:dataPurposeLimitation', 'ms:dataMinimisation'" ;
+            sh:description "Data protection principle applied to the resource (from ms:DataProtectionPrincipleTaxonomy). Required when personalDataIncluded is yesP." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:in ( ms:accuracy ms:alignmentDataRights ms:dataMinimisation ms:integrityConfidentiality ms:lawfulnessFairnessTransparency ms:purposeLimitation ms:storageLimitation ) ;
+            sh:name "data protection principle applied" ;
+            sh:order 18 ;
+            sh:path ms:dataProtectionPrincipleApplied ],
+        [ skos:example "'Compilado a partir de reseñas de usuarios de booking.com recopiladas en 2018'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of the original source from which the resource was derived." ;
+            sh:group gax-validation:MLModelDataProtectionGroup ;
+            sh:name "original source description" ;
+            sh:order 19 ;
+            sh:path ms:originalSourceDescription ],
+        [ skos:example "'(a structure object of type dcat:Distribution)'" ;
+            sh:description "Distribution(s) of the machine learning model, i.e., available formats and access URLs." ;
+            sh:group gax-validation:MLModelDistributionGroup ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "distribution" ;
+            sh:node gax-validation:DistributionShape ;
+            sh:order 20 ;
+            sh:path dcat:distribution ],
+        [ skos:example "'http://publications.europa.eu/resource/authority/country/ESP'" ;
+            sh:description "Spatial coverage of the corpus (e.g., geographic area represented in the data), expressed as an IRI from the EU country and continent authority tables." ;
+            sh:group gax-validation:MLModelClassificationGroup ;
+            sh:in ( continent:AFRICA continent:AMERICA continent:ANTARCTICA continent:ASIA continent:EUROPE continent:OCEANIA continent:OP_DATPRO country:1A0 country:ABW country:AFG country:AFI country:AGO country:AIA country:ALA country:ALB country:AND country:ANT country:ARE country:ARG country:ARM country:ASM country:ATA country:ATB country:ATF country:ATG country:ATN country:AUS country:AUT country:AZE country:BDI country:BEL country:BEN country:BES country:BFA country:BGD country:BGR country:BHR country:BHS country:BIH country:BLM country:BLR country:BLZ country:BMU country:BOL country:BRA country:BRB country:BRN country:BTN country:BUR country:BVT country:BWA country:BYS country:CAF country:CAN country:CCK country:CHE country:CHL country:CHN country:CIV country:CMR country:COD country:COG country:COK country:COL country:COM country:CPT country:CPV country:CRI country:CRQ country:CSK country:CTE country:CUB country:CUW country:CXR country:CYM country:CYP country:CZE country:DDR country:DEU country:DHY country:DJI country:DMA country:DNK country:DOM country:DZA country:ECU country:EGY country:ERI country:ESH country:ESP country:EST country:ETH country:EUR country:FIN country:FJI country:FLK country:FQ0 country:FRA country:FRO country:FSM country:FXX country:GAB country:GBR country:GEL country:GEO country:GGY country:GHA country:GIB country:GIN country:GLP country:GMB country:GNB country:GNQ country:GRC country:GRD country:GRL country:GTM country:GUF country:GUM country:GUY country:HKG country:HMD country:HND country:HRV country:HTI country:HUN country:HVO country:IDN country:IMN country:IND country:IOT country:IRL country:IRN country:IRQ country:ISL country:ISR country:ITA country:JAM country:JEY country:JOR country:JPN country:JTN country:KAZ country:KEN country:KGZ country:KHM country:KIR country:KNA country:KOR country:KWT country:LAO country:LBN country:LBR country:LBY country:LCA country:LIE country:LKA country:LSO country:LTU country:LUX country:LVA country:MAC country:MAF country:MAR country:MCO country:MDA country:MDG country:MDV country:MEX country:MHL country:MID country:MKD country:MLI country:MLT country:MMR country:MNE country:MNG country:MNP country:MOZ country:MRT country:MSR country:MTQ country:MUS country:MWI country:MYS country:MYT country:NAM country:NCL country:NER country:NFK country:NGA country:NHB country:NIC country:NIU country:NLD country:NOR country:NPL country:NRU country:NTZ country:NZL country:OMN country:OP_DATPRO country:PAK country:PAN country:PCI country:PCN country:PCZ country:PER country:PHL country:PLW country:PNG country:POL country:PRI country:PRK country:PRT country:PRY country:PSE country:PUS country:PYF country:QAT country:REU country:RHO country:ROU country:RUS country:RWA country:SAU country:SCG country:SDN country:SEN country:SGP country:SGS country:SHN country:SJM country:SKM country:SLB country:SLE country:SLV country:SMR country:SOM country:SPM country:SRB country:SSD country:STP country:SUN country:SUR country:SVK country:SVN country:SWE country:SWZ country:SXM country:SYC country:SYR country:TCA country:TCD country:TGO country:THA country:TJK country:TKL country:TKM country:TLS country:TMP country:TON country:TTO country:TUN country:TUR country:TUV country:TWN country:TZA country:UGA country:UKR country:UMI country:URY country:USA country:UZB country:VAT country:VCT country:VDR country:VEN country:VGB country:VIR country:VNM country:VUT country:WAK country:WLF country:WSM country:XAC country:XAD country:XBA country:XBH country:XBI country:XCI country:XDST country:XEU country:XGS country:XHS country:XIC country:XIH country:XIN country:XJM country:XKA country:XKM country:XKX country:XLF country:XLI country:XLL country:XMA country:XMAZ country:XME country:XNC country:XNY country:XPA country:XPM country:XQP country:XQR country:XSC country:XSG country:XSL country:XSM country:XSV country:XUCT country:XWS country:XXA country:XXB country:XXC country:XXD country:XXE country:XXF country:XXG country:XXH country:XXI country:XXJ country:XXL country:XXM country:XXN country:XXO country:XXP country:XXR country:XXS country:XXT country:XXU country:XXV country:XXW country:XXY country:XXZ country:YEM country:YMD country:YUG country:ZAF country:ZAR country:ZMB country:ZR0 country:ZWE ) ;
+            sh:name "spatial" ;
+            sh:order 21 ;
+            sh:path dct:spatial ],
+        [ skos:example "'(a structure object of type dct:PeriodOfTime with startDate and endDate)'" ;
+            sh:description "Temporal coverage of the corpus, expressed as a dct:PeriodOfTime with start and end dates." ;
+            sh:group gax-validation:MLModelClassificationGroup ;
+            sh:name "temporal" ;
+            sh:node gax-validation:PeriodOfTimeShape ;
+            sh:order 22 ;
+            sh:path dct:temporal ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ms:law', 'ms:medicine', 'ms:science'" ;
+            sh:description "Domain or field covered by the resource (from ms:DomainTaxonomy)." ;
+            sh:group gax-validation:MLModelClassificationGroup ;
+            sh:in ( ms:AgricultureAndFisheries ms:EconomyAndFinancialMarkets_Services ms:EnvironmentEnergyAndSustainability ms:HealthAndWellbeing ms:ICTInfrastructure ms:Industry ms:LearningAndEducation ms:MediaCommunicationWebAndEntertainment ms:MobilityAndTransportation ms:PublicSectorAndCitizenServices ms:SafetyAndSecurity ms:ScientificResearchDesignAndEngineering ms:other ms:unspecified ) ;
+            sh:name "domain" ;
+            sh:order 23 ;
+            sh:path ms:domain ],
+        [ skos:example "'ms:TEI', 'ms:ISO24622', 'ms:CLARIN'" ;
+            sh:description "Standard or best practice the corpus conforms to (from ms:StandardBestPracticeTaxonomy)." ;
+            sh:group gax-validation:MLModelClassificationGroup ;
+            sh:in ( ms:BML ms:CES ms:CLARIN-SHARE ms:EAGLES ms:ELG-SHARE ms:EML ms:EMMA ms:GMX ms:GrAF ms:HamNoSys ms:ISO12620 ms:ISO16642 ms:ISO1987 ms:ISO26162 ms:ISO30042 ms:ISO704 ms:InkML ms:LAF ms:LMF ms:LemonOntolex ms:MAF ms:MLIF ms:MMI ms:MULTEXT ms:MUMIN ms:OAXAL ms:SRX ms:SemAF ms:SemAF-DA ms:SemAF-DS ms:SemAF-NE ms:SemAF-SR ms:SynAF ms:TBX ms:TEI ms:TEI_P3 ms:TEI_P4 ms:TEI_P5 ms:TMX ms:TimeML ms:XCES ms:XLIFF ms:other ms:pennTreeBank ms:pragueTreebank ms:unspecified ms:wordNet ) ;
+            sh:name "conforms to" ;
+            sh:order 24 ;
+            sh:path dct:conformsTo ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ms:transformer1', 'ms:embeddingModel'" ;
+            sh:description "Type of machine learning model architecture (from ms:ModelTypeTaxonomy)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:in ( ms:DeepLearningModel ms:bayesianNetwork ms:convolutionalNeuralNetwork ms:embeddings ms:gatedRecurrentUnits ms:hiddenMarkovModels ms:kNearestNeighbours ms:logisticRegression ms:longShortTermMemory ms:naiveBayes ms:ngramModel ms:nonDeepLearningModel ms:other ms:randomForest ms:recurrentNeuralNetwork ms:supportVectorMachine ms:transformer1 ms:unspecified ) ;
+            sh:maxCount 1 ;
+            sh:name "model type" ;
+            sh:order 25 ;
+            sh:path ms:modelType ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'omtd:AudioClassification', 'omtd:ArgumentMining'" ;
+            sh:description "Function(s) of the machine learning model (e.g., text classification, named entity recognition, etc.) according to omtd taxonomies." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:in ( omtd:AgeBracketDetection omtd:Alignment omtd:AnaphoraAnnotation omtd:AnaphoraResolution omtd:Annotation omtd:AnnotationOfCompounds omtd:AnnotationOfDates omtd:AnnotationOfDerivationalFeatures omtd:AnnotationOfDocumentStructure omtd:AnnotationOfMeasurements omtd:AnnotationOfMultiWordUnits omtd:AnnotationOfNumbers omtd:AnnotationOfQuestionTopics omtd:AnnotationOfSpeakerTurns omtd:AnnotationOfTextualEntailment omtd:Anonymization omtd:ArgumentMining omtd:Argumentation omtd:AudioClassification omtd:AudioProcessing omtd:AudioSegmentation omtd:AudioToTextGeneration omtd:AuthorClassification omtd:AuthoringSupport omtd:AutomaticHyperlinking omtd:AutomaticSubtitling omtd:AvatarSynthesis omtd:BelowPosTagging omtd:BilingualLexiconInduction omtd:BiomedicalConceptNormalization omtd:BotDetection omtd:BuildingOfFiniteStateAutomata omtd:CertaintyLevelLabelling omtd:Chunking omtd:CoReferenceResolution omtd:CommentFiltering omtd:ComputationalArgumentation omtd:ComputerAidedTranslation omtd:ConceptNormalization omtd:Concordancing omtd:Conjugation omtd:ConstituencyParsing omtd:ContentMining omtd:ContradictionDetection omtd:ConversationalSystemsBuilding omtd:CoreferenceAnnotation omtd:CorpusManagement omtd:CorpusViewing omtd:Crawling omtd:CrossLingualSearch omtd:DataCollection omtd:DataMasking omtd:DataMerging omtd:DataSplitting omtd:DataToTextGeneration omtd:Debugging omtd:DeepParserPerformanceEvaluation omtd:DeepParsing omtd:DependencyConversion omtd:DependencyParsing omtd:DerivationalAnalysis omtd:DialogueModelling omtd:DiscourseAnalysis omtd:DiscourseAnnotation omtd:DiscourseModelling omtd:DocumentComparison omtd:DocumentImageAnalysis omtd:DocumentReading omtd:Editing omtd:EmotionDetection omtd:EmotionGeneration omtd:EmotionLabelling omtd:EntityLinking omtd:EntityMentionLabelling omtd:EntityMentionRecognition omtd:Evaluation omtd:EvaluationOfBroadCoverageNaturalLanguageParsers omtd:EvaluationOfMachineTranslationAndTranslationTools omtd:EventDetection omtd:EventLabelling omtd:ExploratorySearch omtd:ExtractionOfDomainSpecificInformation omtd:ExtractionOfFundingInformation omtd:ExtractionOfQuantitativeInformation omtd:FaceDetection omtd:FaceRecognition omtd:FaceVerification omtd:FacialExpressionRecognition omtd:FactChecking omtd:FakeNewsDetection omtd:FeatureExtraction omtd:FillMask omtd:FlowControl omtd:FormatConversion omtd:FrameExtraction omtd:FrameSemanticParsing omtd:FrequencyCount omtd:GazeteerBasedMatching omtd:GenderDetection omtd:GrammarChecking omtd:HandwritingRecognition omtd:HateSpeechRecognition omtd:HumanAidedMachineTranslation omtd:HumanComputerInteraction omtd:HumourDetection omtd:ImageClassification omtd:ImageFeatureExtraction omtd:ImageGeneration omtd:ImageProcessing omtd:ImageSegmentation omtd:ImageToTextGeneration omtd:ImageTranslation omtd:ImageUnderstanding omtd:InformationExtraction omtd:InformationFiltering omtd:InformationFilteringByRecommenderSystems omtd:InformationRetrieval omtd:InformationStorage omtd:IntraDocumentCoReferenceResolution omtd:IronyDetection omtd:KeywordExtraction omtd:KnowledgeAcquisition omtd:KnowledgeDiscovery omtd:KnowledgeRepresentation omtd:L2WritingSupport omtd:LanguageChecking omtd:LanguageDetection omtd:LanguageIdentification omtd:LanguageModelling omtd:LanguageTechnology omtd:Lemmatization omtd:LexicalSimplification omtd:LexicalSubstitution omtd:LexiconAccess omtd:LexiconAcquisitionFromCorpora omtd:LexiconCreation omtd:LexiconEnhancement omtd:LexiconExtractionFromLexica omtd:LexiconFormatConversion omtd:LexiconMerging omtd:LexiconViewing omtd:LexiconVisualization omtd:LinguisticAnalysis omtd:LipTrackingAnalysis omtd:Localization omtd:MachineTranslation omtd:MachineTranslationSupport omtd:ManagementOfAnnotations omtd:MaskGeneration omtd:Matching omtd:MorphologicalAnalysis omtd:MorphologicalAnnotation omtd:MorphosyntacticTagging omtd:MultilingualGeneration omtd:MultilingualInformationRetrieval omtd:MultimediaAnnotation omtd:MultimediaDevelopment omtd:MultimediaDocumentProcessing omtd:MultimediaInformationExtraction omtd:MultimediaRetrieval omtd:MultimodalIntegration omtd:MultimodalSynthesis omtd:NamedEntityDisambiguation omtd:NamedEntityRecognition omtd:NaturalLanguageGeneration omtd:NaturalLanguageUnderstanding omtd:NegationDetection omtd:NewsGeneration omtd:NlpDevelopmentSupport omtd:Normalization omtd:NormalizationOfMeasurements omtd:NormalizationOfNumbers omtd:NounPhraseChunking omtd:ObjectDetection omtd:OntologyAcquisition omtd:OntologyEnhancement omtd:OperationWithMultimediaInputOrOutput omtd:OpticalCharacterRecognition omtd:OrthographicTranscription omtd:ParagraphSplitting omtd:ParalanguageAnnotation omtd:ParallelSentenceExtraction omtd:Paraphrasing omtd:Parsing omtd:PersonIdentification omtd:PersuasiveExpressionMining omtd:PhoneticTranscription omtd:PhraseAlignment omtd:PolarityDetection omtd:PolarityLabelling omtd:PosTagging omtd:Prediction omtd:ProsodicAnnotation omtd:ProsodicInformationProcessing omtd:ProsodicSegmentation omtd:Pseudonymization omtd:QuestionAnswering omtd:ReadabilityAnnotation omtd:Reading omtd:RecognizingTextualEntailment omtd:RelationExtraction omtd:RepresentationOfSpaceAndTime omtd:ResourceAccess omtd:RumoursStanceClassification omtd:ScriptBasedAnalysis omtd:Search omtd:SemanticAnnotation omtd:SemanticClassLabelling omtd:SemanticReasoning omtd:SemanticRelationLabelling omtd:SemanticRoleLabelling omtd:SemanticSearch omtd:SentenceAlignment omtd:SentenceSimilarityAssessment omtd:SentenceSplitting omtd:SentimentAnalysis omtd:SignLanguageGeneration omtd:SignLanguageRecognition omtd:SoundEventAnnotation omtd:SoundToTextAlignment omtd:SpatialRoleLabelling omtd:SpeakerDiarization omtd:SpeakerIdentification omtd:SpeakerVerification omtd:SpeechAnalysis omtd:SpeechAnalytics omtd:SpeechAnnotation omtd:SpeechAssistedVideoControl omtd:SpeechEnhancement omtd:SpeechRecognition omtd:SpeechRetrieval omtd:SpeechSynthesis omtd:SpeechSynthesisEvaluation omtd:SpeechToSpeechTranslation omtd:SpeechToTextTranslation omtd:SpeechUnderstanding omtd:SpellChecking omtd:SpokenLanguageGeneration omtd:SpokenLanguageUnderstanding omtd:StanceDetection omtd:StatisticalLanguageModelling omtd:Stemming omtd:StructuralAnnotation omtd:Summarization omtd:SupportOfCrowdsourcingTasks omtd:SupportOperation omtd:SupportOperationForKnowledgeResources omtd:SyllableSegmentation omtd:SyntacticStructureGeneration omtd:TableQuestionAnswering omtd:TagsetConversion omtd:TalkingHeadSynthesis omtd:TaskOrientedTextAnalysisEvaluation omtd:TemporalExpressionRecognition omtd:TemporalExpressionsLabelling omtd:TermExtraction omtd:TerminologyManagement omtd:TerminologyMarkup omtd:TerminologySearch omtd:TextAnalysis omtd:TextAndDataAnalytics omtd:TextAndDataMining omtd:TextAnnotation omtd:TextCategorization omtd:TextCompression omtd:TextEncryption omtd:TextGeneration omtd:TextIndexing omtd:TextSimilarityAssessment omtd:TextSimplification omtd:TextSpeechDataAnalytics omtd:TextToImageGeneration omtd:TextToSpeechSynthesis omtd:TextToTextGeneration omtd:TextToVideoGeneration omtd:Tokenization omtd:TopicDetection omtd:TrainingOfLanguageModels omtd:TrainingOfMachineLearningModels omtd:TrainingOfNmtModels omtd:Transcription omtd:Translation omtd:TranslationMemoryManagement omtd:TranslationProjectManagement omtd:Transliteration omtd:TruthLabelling omtd:UnicodeConformTokenizing omtd:UserAuthentication omtd:Validation omtd:VerbalAggressionAnalysis omtd:VideoClassification omtd:VideoGeneration omtd:VideoToTextGeneration omtd:Viewing omtd:Visualization omtd:WordAlignment omtd:WordSegmentation omtd:WordSenseDisambiguation omtd:WordSenseInduction omtd:Writing omtd:ZeroShotClassification omtd:other omtd:unspecified ) ;
+            sh:minCount 1 ;
+            sh:name "model function" ;
+            sh:order 26 ;
+            sh:path ms:modelFunction ],
+        [ skos:example "'512', '4096', '128000'" ;
+            sh:datatype xsd:integer ;
+            sh:description "Maximum context window size of the model (in tokens)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:maxCount 1 ;
+            sh:name "context length" ;
+            sh:order 27 ;
+            sh:path ms:contextLength ],
+        [ skos:example "'fp32', 'fp16', 'int8'" ;
+            sh:datatype xsd:string ;
+            sh:description "Numeric precision of the model parameters (e.g., fp32, fp16, bf16, int8, int4)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:maxCount 1 ;
+            sh:name "parameter precision" ;
+            sh:order 28 ;
+            sh:path ms:parameterPrecision ],
+        [ skos:example "'true', 'false'" ;
+            sh:datatype xsd:boolean ;
+            sh:description "Indicates whether the model has been quantized." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:maxCount 1 ;
+            sh:name "quantized" ;
+            sh:order 29 ;
+            sh:path ms:quantized ],
+        [ skos:example "'Cuantización dinámica posterior al entrenamiento a int8 utilizando bitsandbytes'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of the quantization process applied to the model" ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "quantization process" ;
+            sh:order 30 ;
+            sh:path ms:quantizationProcess ],
+        [ skos:example "'Entrenado durante 3 épocas en 8x A100 GPUs utilizando el optimizador AdamW'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of the model creation process (training procedure, hyper-parameters, infrastructure, etc.)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "creation details" ;
+            sh:order 31 ;
+            sh:path ms:creationDetails ],
+        [ skos:example "'F1=0.87 on CoNLL-2003 NER test set'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description or summary of the evaluation results obtained by the model on benchmarks or downstream tasks." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "evaluation results" ;
+            sh:order 32 ;
+            sh:path ms:evaluationResults ],
+        [ skos:example "'Tendencia a sobre-representar pronombres masculinos en descripciones de profesiones'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of known biases of the model (it6:bias)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "bias" ;
+            sh:order 33 ;
+            sh:path it6:bias ],
+        [ skos:example "'No validado en dialectos fuera del español europeo'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text description of known limitations of the model (it6:limitations)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "limitations" ;
+            sh:order 34 ;
+            sh:path it6:limitations ],
+        [ skos:example "'(a structure object of type ms:DatasetReference with dct:title)'" ;
+            sh:description "Reference(s) to the dataset(s) used to train the model (it6:trainedOn)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "trained on" ;
+            sh:node gax-validation:DatasetReferenceShape ;
+            sh:order 35 ;
+            sh:path it6:trainedOn ],
+        [ skos:example "'(a structure object of type ms:DatasetReference)'" ;
+            sh:description "Reference(s) to the dataset(s) used to fine-tune the model." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "finetune dataset" ;
+            sh:node gax-validation:DatasetReferenceShape ;
+            sh:order 36 ;
+            sh:path ms:finetuneDataset ],
+        [ skos:example "'(a structure object of type ms:DatasetReference)'" ;
+            sh:description "Reference(s) to the dataset(s) used to evaluate the model." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "evaluation dataset" ;
+            sh:node gax-validation:DatasetReferenceShape ;
+            sh:order 37 ;
+            sh:path ms:evaluationDataset ],
+        [ skos:example "'(a structure object of type ms:DatasetReference)'" ;
+            sh:description "Reference(s) to the base model(s) this model is a variant of (e.g., the original pre-trained checkpoint)." ;
+            sh:group gax-validation:MLModelModelPropertiesGroup ;
+            sh:name "variant of" ;
+            sh:node gax-validation:DatasetReferenceShape ;
+            sh:order 38 ;
+            sh:path ms:variantOf ],
+        [ skos:example "'(a structure object of type dct:LicenseDocument)'" ;
+            sh:description "License(s) under which the model is made available (dct:license)." ;
+            sh:group gax-validation:MLModelLicenseGroup ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "license" ;
+            sh:node gax-validation:LicenseDocumentShape ;
+            sh:order 39 ;
+            sh:path dct:license ],
+        [ skos:example "'(a structure object of type foaf:Organization)'" ;
+            sh:description "Organization publishing or making the model available (dct:publisher)." ;
+            sh:group gax-validation:MLModelPublisherGroup ;
+            sh:maxCount 1 ;
+            sh:name "publisher" ;
+            sh:node gax-validation:OrganizationShape ;
+            sh:order 40 ;
+            sh:path dct:publisher ],
+        [ skos:example "'(a structure object of type foaf:Organization)'" ;
+            sh:description "Intellectual Property Rights holder(s) of the model." ;
+            sh:group gax-validation:MLModelIntellectualPropertyRightsGroup ;
+            sh:name "ipr holder" ;
+            sh:node gax-validation:OrganizationShape ;
+            sh:order 41 ;
+            sh:path ms:iprHolder ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "" ;
+            sh:description "Source language(s) of the model when relevant (e.g., translation models)." ;
+            sh:group gax-validation:MLModelSourceLanguageGroup ;
+            sh:name "source language" ;
+            sh:node gax-validation:LanguageShape ;
+            sh:order 42 ;
+            sh:path ms:sourceLanguage ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "" ;
+            sh:description "Target language(s) of the model when relevant (e.g., translation models)." ;
+            sh:group gax-validation:MLModelTargetLanguageGroup ;
+            sh:name "target language" ;
+            sh:node gax-validation:LanguageShape ;
+            sh:order 43 ;
+            sh:path ms:targetLanguage ],
+        [ skos:example "" ;
+            sh:description "Links a machine learning model to a document (research paper, model card, user manual, etc.) that documents the resource." ;
+            sh:group gax-validation:MLModelDocumentationGroup ;
+            sh:name "is documented by" ;
+            sh:node gax-validation:DocumentShape ;
+            sh:order 44 ;
+            sh:path ms:isDocumentedBy ] ;
+    sh:targetClass ms:MLModel .
+
+gax-validation:MLModelSourceLanguageGroup a sh:PropertyGroup ;
+    rdfs:label "Source Language" ;
+    sh:order 11 .
+
+gax-validation:MLModelTargetLanguageGroup a sh:PropertyGroup ;
+    rdfs:label "Target Language" ;
+    sh:order 12 .
+
+gax-validation:OfferingPriceShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'www.simpl.com'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "URL to the used license" ;
+            sh:maxLength 255 ;
+            sh:minCount 1 ;
+            sh:minLength 1 ;
+            sh:name "license" ;
+            sh:order 1 ;
+            sh:path simpl:license ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'BGN, EUR, CZK'" ;
+            sh:datatype xsd:string ;
+            sh:description "Price and conditions" ;
+            sh:in ( "BGN" "EUR" "CZK" "DKK" "HUF" "PLN" "RON" "SEK" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "currency" ;
+            sh:order 2 ;
+            sh:path simpl:currency ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'0, 1, 2'" ;
+            sh:datatype xsd:decimal ;
+            sh:description "Price and conditions" ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 99999999999.0 ;
+            sh:minCount 1 ;
+            sh:minInclusive 0.0 ;
+            sh:name "price" ;
+            sh:order 3 ;
+            sh:path simpl:price ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'free, commercial'" ;
+            sh:datatype xsd:string ;
+            sh:description "Price Type" ;
+            sh:in ( "free" "commercial" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "price type" ;
+            sh:order 4 ;
+            sh:path simpl:priceType ] ;
+    sh:targetClass simpl:OfferingPrice .
+
+gax-validation:PeriodOfTimeShape a sh:NodeShape ;
+    sh:property [ skos:example "'2018-01-01'" ;
+            sh:datatype xsd:date ;
+            sh:description "Inclusive start date of the period." ;
+            sh:maxCount 1 ;
+            sh:name "start date" ;
+            sh:order 1 ;
+            sh:path dcat:startDate ],
+        [ skos:example "'2018-12-31'" ;
+            sh:datatype xsd:date ;
+            sh:description "Inclusive end date of the period." ;
+            sh:maxCount 1 ;
+            sh:name "end date" ;
+            sh:order 2 ;
+            sh:path dcat:endDate ] ;
+    sh:targetClass dct:PeriodOfTime .
+
+gax-validation:ProviderInformationShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'123'" ;
+            sh:datatype xsd:string ;
+            sh:description "A reference to ID of the dataset/application/infrastructure provider" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "provided by" ;
+            sh:order 1 ;
+            sh:path simpl:providedBy ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'support'" ;
+            sh:datatype xsd:string ;
+            sh:description "Who to contact in case of questions/issues" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contact" ;
+            sh:order 2 ;
+            sh:path simpl:contact ;
+            sh:pattern "^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'signature'" ;
+            sh:datatype xsd:string ;
+            sh:description "A digital signature that ensures that the provider is the one that uploaded the Self-description" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "signature" ;
+            sh:order 3 ;
+            sh:path simpl:signature ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s-]*$" ] ;
+    sh:targetClass simpl:ProviderInformation .
+
+gax-validation:ServicePolicyShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ODRL policy'" ;
+            sh:datatype xsd:string ;
+            sh:description "Access policy to define who can access the dataset" ;
+            sh:minCount 1 ;
+            sh:name "access-policy" ;
+            sh:order 1 ;
+            sh:path simpl:access-policy ;
+            sh:pattern "[:,\\{\\}\\[\\]]|(\".*?\")|('.*?')|[-\\w.]+" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ODRL policy'" ;
+            sh:datatype xsd:string ;
+            sh:description "Usage policy to define how a dataset can be used" ;
+            sh:minCount 1 ;
+            sh:name "usage-policy" ;
+            sh:order 2 ;
+            sh:path simpl:usage-policy ;
+            sh:pattern "[:,\\{\\}\\[\\]]|(\".*?\")|('.*?')|[-\\w.]+" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Free text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates compliance with relevant data protection regulations and standards" ;
+            sh:name "data protection regime" ;
+            sh:order 3 ;
+            sh:path simpl:dataProtectionRegime ;
+            sh:pattern "[:,\\{\\}\\[\\]]|(\".*?\")|('.*?')|[-\\w.]+" ] ;
+    sh:targetClass simpl:ServicePolicy .
+
+gax-validation:SizeShape a sh:NodeShape ;
+    sh:property [ skos:example "'1000000', '5432'" ;
+            sh:datatype xsd:float ;
+            sh:description "Numeric amount (must be positive)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "amount" ;
+            sh:order 1 ;
+            sh:path ms:amount ],
+        [ skos:example "'ms:token', 'ms:word3', 'ms:text1'" ;
+            sh:description "Unit of measurement: an IRI from ms:SizeUnitTaxonomy (e.g. ms:token, ms:word3, ms:text1, ms:file, ms:gb)." ;
+            sh:in ( ms:T-HPair ms:article ms:bigram ms:byte ms:class ms:concept ms:diphone1 ms:element ms:entry ms:expression ms:file ms:five-gram ms:four-gram ms:frame1 ms:gb ms:hour1 ms:idiomaticExpression ms:image2 ms:ingestedRecord ms:internalRecord ms:item ms:kb ms:keyword1 ms:lexicalType ms:mb ms:minute ms:multiWordUnit ms:neologism ms:other ms:parameter ms:phoneme2 ms:phoneticUnit ms:phrase1 ms:predicate ms:publishedRecord ms:question ms:rule ms:second ms:segment ms:semanticUnit1 ms:sentence1 ms:shot1 ms:syllable2 ms:synset ms:syntacticUnit1 ms:tb ms:term ms:text1 ms:token ms:translationUnit ms:trigram ms:triple ms:turn ms:unigram ms:unit ms:unspecified ms:utterance1 ms:word3 ms:tokens ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "size unit" ;
+            sh:order 2 ;
+            sh:path ms:sizeUnit ] ;
+    sh:targetClass ms:Size .
+
+gax-validation:MLModelIdentificationGroup a sh:PropertyGroup ;
+    rdfs:label "Identification" ;
+    sh:order 2 .
+
+gax-validation:OrganizationShape a sh:NodeShape ;
+    sh:property [ skos:example "'Fundación para la Transformación de la Rioja'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Legal or display name of the publisher organization" ;
+            sh:minCount 1 ;
+            sh:name "name" ;
+            sh:order 1 ;
+            sh:path foaf:name ],
+        [ skos:example "'(a structure object of type adms:Identifier with skos:notation and adms:schemaAgency)'" ;
+            sh:description "ADMS identifier(s) for the organization (e.g., ISNI, ROR)." ;
+            sh:name "identifier" ;
+            sh:node gax-validation:IdentifierShape ;
+            sh:order 2 ;
+            sh:path adms:identifier ] ;
+    sh:targetClass foaf:Organization .
+
+gax-validation:LanguageShape a sh:NodeShape ;
+    sh:property [ skos:example "'bcp47:language_es', 'bcp47:language_ca', 'bcp47:language_en', 'bcp47:language_it'" ;
+            sh:description "BCP47 language code IRI from the w3id BCP47 vocabulary used by LanguageDCAT-AP (e.g. bcp47:language_it = http://w3id.org/meta-share/bcp47/language_it)." ;
+            sh:group gax-validation:LanguageLanguageGroup ;
+            sh:in ( bcp47:language_aa bcp47:language_ab bcp47:language_ae bcp47:language_af bcp47:language_ak bcp47:language_am bcp47:language_an bcp47:language_ar bcp47:language_as bcp47:language_av bcp47:language_ay bcp47:language_az bcp47:language_ba bcp47:language_be bcp47:language_bg bcp47:language_bh bcp47:language_bi bcp47:language_bm bcp47:language_bn bcp47:language_bo bcp47:language_br bcp47:language_bs bcp47:language_ca bcp47:language_ce bcp47:language_ch bcp47:language_co bcp47:language_cr bcp47:language_cs bcp47:language_cu bcp47:language_cv bcp47:language_cy bcp47:language_da bcp47:language_de bcp47:language_dv bcp47:language_dz bcp47:language_ee bcp47:language_el bcp47:language_en bcp47:language_eo bcp47:language_es bcp47:language_et bcp47:language_eu bcp47:language_fa bcp47:language_ff bcp47:language_fi bcp47:language_fj bcp47:language_fo bcp47:language_fr bcp47:language_fy bcp47:language_ga bcp47:language_gd bcp47:language_gl bcp47:language_gn bcp47:language_gu bcp47:language_gv bcp47:language_ha bcp47:language_he bcp47:language_hi bcp47:language_ho bcp47:language_hr bcp47:language_ht bcp47:language_hu bcp47:language_hy bcp47:language_hz bcp47:language_ia bcp47:language_id bcp47:language_ie bcp47:language_ig bcp47:language_ii bcp47:language_ik bcp47:language_in bcp47:language_io bcp47:language_is bcp47:language_it bcp47:language_iu bcp47:language_iw bcp47:language_ja bcp47:language_ji bcp47:language_jv bcp47:language_jw bcp47:language_ka bcp47:language_kg bcp47:language_ki bcp47:language_kj bcp47:language_kk bcp47:language_kl bcp47:language_km bcp47:language_kn bcp47:language_ko bcp47:language_kr bcp47:language_ks bcp47:language_ku bcp47:language_kv bcp47:language_kw bcp47:language_ky bcp47:language_la bcp47:language_lb bcp47:language_lg bcp47:language_li bcp47:language_ln bcp47:language_lo bcp47:language_lt bcp47:language_lu bcp47:language_lv bcp47:language_mg bcp47:language_mh bcp47:language_mi bcp47:language_mk bcp47:language_ml bcp47:language_mn bcp47:language_mo bcp47:language_mr bcp47:language_ms bcp47:language_mt bcp47:language_my bcp47:language_na bcp47:language_nb bcp47:language_nd bcp47:language_ne bcp47:language_ng bcp47:language_nl bcp47:language_nn bcp47:language_no bcp47:language_nr bcp47:language_nv bcp47:language_ny bcp47:language_oc bcp47:language_oj bcp47:language_om bcp47:language_or bcp47:language_os bcp47:language_pa bcp47:language_pi bcp47:language_pl bcp47:language_ps bcp47:language_pt bcp47:language_qu bcp47:language_rm bcp47:language_rn bcp47:language_ro bcp47:language_ru bcp47:language_rw bcp47:language_sa bcp47:language_sc bcp47:language_sd bcp47:language_se bcp47:language_sg bcp47:language_sh bcp47:language_si bcp47:language_sk bcp47:language_sl bcp47:language_sm bcp47:language_sn bcp47:language_so bcp47:language_sq bcp47:language_sr bcp47:language_ss bcp47:language_st bcp47:language_su bcp47:language_sv bcp47:language_sw bcp47:language_ta bcp47:language_te bcp47:language_tg bcp47:language_th bcp47:language_ti bcp47:language_tk bcp47:language_tl bcp47:language_tn bcp47:language_to bcp47:language_tr bcp47:language_ts bcp47:language_tt bcp47:language_tw bcp47:language_ty bcp47:language_ug bcp47:language_uk bcp47:language_ur bcp47:language_uz bcp47:language_ve bcp47:language_vi bcp47:language_vo bcp47:language_wa bcp47:language_wo bcp47:language_xh bcp47:language_yi bcp47:language_yo bcp47:language_za bcp47:language_zh bcp47:language_zu ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "language code" ;
+            sh:order 1 ;
+            sh:path ms:languageCode ],
+        [ skos:example "'bcp47:region_ES', 'bcp47:region_MX', 'bcp47:region_AD'" ;
+            sh:description "BCP47 region code IRI from ms:LocationTaxonomy (e.g., ISO 3166-1 alpha-2 country codes)." ;
+            sh:group gax-validation:LanguageLanguageGroup ;
+            sh:in ( bcp47:region_AA bcp47:region_AC bcp47:region_AD bcp47:region_AE bcp47:region_AF bcp47:region_AG bcp47:region_AI bcp47:region_AL bcp47:region_AM bcp47:region_AN bcp47:region_AO bcp47:region_AQ bcp47:region_AR bcp47:region_AS bcp47:region_AT bcp47:region_AU bcp47:region_AW bcp47:region_AX bcp47:region_AZ bcp47:region_BA bcp47:region_BB bcp47:region_BD bcp47:region_BE bcp47:region_BF bcp47:region_BG bcp47:region_BH bcp47:region_BI bcp47:region_BJ bcp47:region_BL bcp47:region_BM bcp47:region_BN bcp47:region_BO bcp47:region_BQ bcp47:region_BR bcp47:region_BS bcp47:region_BT bcp47:region_BU bcp47:region_BV bcp47:region_BW bcp47:region_BY bcp47:region_BZ bcp47:region_CA bcp47:region_CC bcp47:region_CD bcp47:region_CF bcp47:region_CG bcp47:region_CH bcp47:region_CI bcp47:region_CK bcp47:region_CL bcp47:region_CM bcp47:region_CN bcp47:region_CO bcp47:region_CP bcp47:region_CQ bcp47:region_CR bcp47:region_CS bcp47:region_CU bcp47:region_CV bcp47:region_CW bcp47:region_CX bcp47:region_CY bcp47:region_CZ bcp47:region_DD bcp47:region_DE bcp47:region_DG bcp47:region_DJ bcp47:region_DK bcp47:region_DM bcp47:region_DO bcp47:region_DZ bcp47:region_EA bcp47:region_EC bcp47:region_EE bcp47:region_EG bcp47:region_EH bcp47:region_ER bcp47:region_ES bcp47:region_ET bcp47:region_EU bcp47:region_EZ bcp47:region_FI bcp47:region_FJ bcp47:region_FK bcp47:region_FM bcp47:region_FO bcp47:region_FR bcp47:region_FX bcp47:region_GA bcp47:region_GB bcp47:region_GD bcp47:region_GE bcp47:region_GF bcp47:region_GG bcp47:region_GH bcp47:region_GI bcp47:region_GL bcp47:region_GM bcp47:region_GN bcp47:region_GP bcp47:region_GQ bcp47:region_GR bcp47:region_GS bcp47:region_GT bcp47:region_GU bcp47:region_GW bcp47:region_GY bcp47:region_HK bcp47:region_HM bcp47:region_HN bcp47:region_HR bcp47:region_HT bcp47:region_HU bcp47:region_IC bcp47:region_ID bcp47:region_IE bcp47:region_IL bcp47:region_IM bcp47:region_IN bcp47:region_IO bcp47:region_IQ bcp47:region_IR bcp47:region_IS bcp47:region_IT bcp47:region_JE bcp47:region_JM bcp47:region_JO bcp47:region_JP bcp47:region_KE bcp47:region_KG bcp47:region_KH bcp47:region_KI bcp47:region_KM bcp47:region_KN bcp47:region_KP bcp47:region_KR bcp47:region_KW bcp47:region_KY bcp47:region_KZ bcp47:region_LA bcp47:region_LB bcp47:region_LC bcp47:region_LI bcp47:region_LK bcp47:region_LR bcp47:region_LS bcp47:region_LT bcp47:region_LU bcp47:region_LV bcp47:region_LY bcp47:region_MA bcp47:region_MC bcp47:region_MD bcp47:region_ME bcp47:region_MF bcp47:region_MG bcp47:region_MH bcp47:region_MK bcp47:region_ML bcp47:region_MM bcp47:region_MN bcp47:region_MO bcp47:region_MP bcp47:region_MQ bcp47:region_MR bcp47:region_MS bcp47:region_MT bcp47:region_MU bcp47:region_MV bcp47:region_MW bcp47:region_MX bcp47:region_MY bcp47:region_MZ bcp47:region_NA bcp47:region_NC bcp47:region_NE bcp47:region_NF bcp47:region_NG bcp47:region_NI bcp47:region_NL bcp47:region_NO bcp47:region_NP bcp47:region_NR bcp47:region_NT bcp47:region_NU bcp47:region_NZ bcp47:region_OM bcp47:region_PA bcp47:region_PE bcp47:region_PF bcp47:region_PG bcp47:region_PH bcp47:region_PK bcp47:region_PL bcp47:region_PM bcp47:region_PN bcp47:region_PR bcp47:region_PS bcp47:region_PT bcp47:region_PW bcp47:region_PY bcp47:region_QA bcp47:region_RE bcp47:region_RO bcp47:region_RS bcp47:region_RU bcp47:region_RW bcp47:region_SA bcp47:region_SB bcp47:region_SC bcp47:region_SD bcp47:region_SE bcp47:region_SG bcp47:region_SH bcp47:region_SI bcp47:region_SJ bcp47:region_SK bcp47:region_SL bcp47:region_SM bcp47:region_SN bcp47:region_SO bcp47:region_SR bcp47:region_SS bcp47:region_ST bcp47:region_SU bcp47:region_SV bcp47:region_SX bcp47:region_SY bcp47:region_SZ bcp47:region_TA bcp47:region_TC bcp47:region_TD bcp47:region_TF bcp47:region_TG bcp47:region_TH bcp47:region_TJ bcp47:region_TK bcp47:region_TL bcp47:region_TM bcp47:region_TN bcp47:region_TO bcp47:region_TP bcp47:region_TR bcp47:region_TT bcp47:region_TV bcp47:region_TW bcp47:region_TZ bcp47:region_UA bcp47:region_UG bcp47:region_UM bcp47:region_UN bcp47:region_US bcp47:region_UY bcp47:region_UZ bcp47:region_VA bcp47:region_VC bcp47:region_VE bcp47:region_VG bcp47:region_VI bcp47:region_VN bcp47:region_VU bcp47:region_WF bcp47:region_WS bcp47:region_YD bcp47:region_YE bcp47:region_YT bcp47:region_YU bcp47:region_ZA bcp47:region_ZM bcp47:region_ZR bcp47:region_ZW bcp47:region_ZZ ) ;
+            sh:maxCount 1 ;
+            sh:name "region" ;
+            sh:order 2 ;
+            sh:path ms:region ],
+        [ skos:example "'bcp47:script_Latn'" ;
+            sh:description "BCP47 script code IRI from ms:ScriptTaxonomy (e.g., ISO 15924 script codes)." ;
+            sh:group gax-validation:LanguageLanguageGroup ;
+            sh:in ( bcp47:script_Latn ms:Latn ) ;
+            sh:maxCount 1 ;
+            sh:name "script" ;
+            sh:order 3 ;
+            sh:path ms:script ],
+        [ skos:example "'bcp47:variant_valencia', 'bcp47:variant_biscayan', 'bcp47:variant_aranes'" ;
+            sh:description "BCP47 variant code IRI(s) from ms:VariantTaxonomy)." ;
+            sh:group gax-validation:LanguageLanguageGroup ;
+            sh:in ( bcp47:variant_1606nict bcp47:variant_1694acad bcp47:variant_1901 bcp47:variant_1959acad bcp47:variant_1994 bcp47:variant_1996 bcp47:variant_abl1943 bcp47:variant_akuapem bcp47:variant_alalc97 bcp47:variant_aluku bcp47:variant_anpezo bcp47:variant_ao1990 bcp47:variant_aranes bcp47:variant_arevela bcp47:variant_arevmda bcp47:variant_arkaika bcp47:variant_asante bcp47:variant_auvern bcp47:variant_baku1926 bcp47:variant_balanka bcp47:variant_barla bcp47:variant_basiceng bcp47:variant_bauddha bcp47:variant_bciav bcp47:variant_bcizbl bcp47:variant_biscayan bcp47:variant_biske bcp47:variant_blasl bcp47:variant_bohoric bcp47:variant_boont bcp47:variant_bornholm bcp47:variant_cisaup bcp47:variant_colb1945 bcp47:variant_cornu bcp47:variant_creiss bcp47:variant_dajnko bcp47:variant_ekavsk bcp47:variant_emodeng bcp47:variant_fascia bcp47:variant_fodom bcp47:variant_fonipa bcp47:variant_fonkirsh bcp47:variant_fonnapa bcp47:variant_fonupa bcp47:variant_fonxsamp bcp47:variant_gallo bcp47:variant_gascon bcp47:variant_gherd bcp47:variant_grclass bcp47:variant_grital bcp47:variant_grmistr bcp47:variant_hepburn bcp47:variant_heploc bcp47:variant_hognorsk bcp47:variant_hsistemo bcp47:variant_ijekavsk bcp47:variant_itihasa bcp47:variant_ivanchov bcp47:variant_jauer bcp47:variant_jyutping bcp47:variant_kkcor bcp47:variant_kociewie bcp47:variant_kscor bcp47:variant_laukika bcp47:variant_lemosin bcp47:variant_lengadoc bcp47:variant_lipaw bcp47:variant_ltg1929 bcp47:variant_ltg2007 bcp47:variant_luna1918 bcp47:variant_metelko bcp47:variant_monoton bcp47:variant_ndyuka bcp47:variant_nedis bcp47:variant_newfound bcp47:variant_nicard bcp47:variant_njiva bcp47:variant_nulik bcp47:variant_osojs bcp47:variant_oxendict bcp47:variant_pahawh2 bcp47:variant_pahawh3 bcp47:variant_pahawh4 bcp47:variant_pamaka bcp47:variant_peano bcp47:variant_pehoeji bcp47:variant_petr1708 bcp47:variant_pinyin bcp47:variant_polyton bcp47:variant_provenc bcp47:variant_puter bcp47:variant_rigik bcp47:variant_rozaj bcp47:variant_rumgr bcp47:variant_scotland bcp47:variant_scouse bcp47:variant_simple bcp47:variant_solba bcp47:variant_sotav bcp47:variant_spanglis bcp47:variant_surmiran bcp47:variant_sursilv bcp47:variant_sutsilv bcp47:variant_synnejyl bcp47:variant_tailo bcp47:variant_tarask bcp47:variant_tongyong bcp47:variant_tunumiit bcp47:variant_uccor bcp47:variant_ucrcor bcp47:variant_ulster bcp47:variant_unifon bcp47:variant_vaidika bcp47:variant_valbadia bcp47:variant_valencia bcp47:variant_vallader bcp47:variant_vecdruka bcp47:variant_vivaraup bcp47:variant_wadegile bcp47:variant_xsistemo ) ;
+            sh:name "variant" ;
+            sh:order 4 ;
+            sh:path ms:variant ],
+        [ skos:example "'Andaluz', 'Rioplatense', 'Valenciano'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text name of any language variety or dialect, including ones with no registered BCP47 subtag (e.g. Andalusian, Rioplatense, Canarian)" ;
+            sh:group gax-validation:LanguageLanguageGroup ;
+            sh:name "language variety name" ;
+            sh:order 5 ;
+            sh:path ms:languageVarietyName ],
+        [ skos:example "'es-ES', 'ca-ES', 'zh-Hant-HK'" ;
+            sh:datatype xsd:string ;
+            sh:description "BCP47 language tag string composed of language code and (optionally) region, script and variant subtags (e.g., 'es-ES', 'ca-ES', 'zh-Hant-HK')." ;
+            sh:group gax-validation:LanguageLanguageGroup ;
+            sh:maxCount 1 ;
+            sh:name "language tag" ;
+            sh:order 6 ;
+            sh:path ms:languageTag ] ;
+    sh:targetClass ms:Language .
+
+gax-validation:DatasetReferenceShape a sh:NodeShape ;
+    sh:property [ skos:example "'Common Crawl 2019'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable title of the referenced dataset" ;
+            sh:minCount 1 ;
+            sh:name "title" ;
+            sh:order 1 ;
+            sh:path dct:title ],
+        [ skos:example "'(a structure object of type adms:Identifier)'" ;
+            sh:description "ADMS identifier(s) of the referenced dataset (e.g., DOI, Handle, URL)." ;
+            sh:name "identifier" ;
+            sh:node gax-validation:IdentifierShape ;
+            sh:order 2 ;
+            sh:path adms:identifier ] ;
+    sh:targetClass ms:DatasetReference .
+
+gax-validation:IdentifierShape a sh:NodeShape ;
+    sh:property [ skos:example "'https://doi.org/10.57771/rnyr-fa06a', 'https://isni.org/isni/0000000121748431', 'CC-BY-NC-SA-4.0'" ;
+            sh:datatype xsd:string ;
+            sh:description "Identifier value (e.g. DOI, Handle, ISNI, ROR, SPDX). Free string, as in LanguageDCAT-AP." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "notation" ;
+            sh:order 1 ;
+            sh:path skos:notation ],
+        [ skos:example "''ISNI International Agency'@en', ''ROR'@en'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Agency responsible for the identifier schema. Supports multiple languages using language tags." ;
+            sh:name "schema agency" ;
+            sh:order 2 ;
+            sh:path adms:schemaAgency ] ;
+    sh:targetClass adms:Identifier .
+
+gax-validation:MLModelClassificationGroup a sh:PropertyGroup ;
+    rdfs:label "Classification" ;
+    sh:order 6 .
+
+gax-validation:LanguageLanguageGroup a sh:PropertyGroup ;
+    rdfs:label "Language" ;
+    sh:order 1 .
+
+gax-validation:MLModelBasicInformationGroup a sh:PropertyGroup ;
+    rdfs:label "Basic Information" ;
+    sh:order 1 .
+
+gax-validation:MLModelDataProtectionGroup a sh:PropertyGroup ;
+    rdfs:label "Data Protection" ;
+    sh:order 4 .
+
+gax-validation:MLModelModelPropertiesGroup a sh:PropertyGroup ;
+    rdfs:label "Model Properties" ;
+    sh:order 7 .

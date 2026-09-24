@@ -1,0 +1,41 @@
+@prefix gax-validation: <http://w3id.org/gaia-x/validation#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix simpl: <http://w3id.org/gaia-x/simpl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+gax-validation:ContractTemplateShape a sh:NodeShape ;
+    sh:property [ skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of contract template" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template id" ;
+            sh:order 1 ;
+            sh:path simpl:contractTemplateId ],
+        [ skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of billing schema" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "billing schema id" ;
+            sh:order 2 ;
+            sh:path simpl:billingSchemaId ],
+        [ skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of sla agreement" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "sla agreement id" ;
+            sh:order 3 ;
+            sh:path simpl:slaAgreementId ],
+        [ skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of licence agreement" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "licence agreement id" ;
+            sh:order 4 ;
+            sh:path simpl:licenceAgreementId ] ;
+    sh:targetClass simpl:ContractTemplate .
+

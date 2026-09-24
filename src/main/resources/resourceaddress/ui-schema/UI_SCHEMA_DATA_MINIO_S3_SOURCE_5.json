@@ -1,0 +1,29 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/type",
+      "label": "Source type",
+      "options": {
+        "readonly": true
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/endpoint",
+      "label": "MinIO Endpoint URL"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/bucketName",
+      "label": "Bucket name"
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/objectName",
+      "label": "Object name"
+    }
+  ]
+}
+

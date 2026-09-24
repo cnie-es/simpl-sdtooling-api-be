@@ -1,0 +1,18 @@
+#OfferingTypeConfig
+#Configure values of offering type based on shape files name
+offeringType:
+  config:
+    templates: '[
+                  {
+                    "key": "application-offeringShape",
+                    "value": "application"
+                  },
+                  {
+                    "key": "data-offeringShape",
+                    "value": "data"
+                  },
+                  {
+                    "key": "infrastructure-offeringShape",
+                    "value": "infrastructure"
+                  }
+                ]'

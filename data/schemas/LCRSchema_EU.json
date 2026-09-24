@@ -1,0 +1,8 @@
+{
+  "id":"LCRSchema_EU",
+  "name": "LCR",
+  "title": "LCR",
+  "description": "Edval dataspaceren baliabide lexiko-kontzeptualen eskaintzetarako eskema",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

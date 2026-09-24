@@ -1,0 +1,27 @@
+{
+	"type": "object",
+	"required": [
+		"type",
+		"edeliveryTriggerAPI",
+		"appDataIdentifier"
+	],
+	"properties": {
+		"type": {
+			"type": "string",
+			"const": "eDelivery",
+			"default": "eDelivery"
+		},
+		"edeliveryTriggerAPI": {
+			"type": "string",
+			"format": "uri",
+			"description": "eDelivery trigger API endpoint URL"
+		},
+		"appDataIdentifier": {
+			"type": "string",
+			"minLength": 1,
+			"maxLength": 255,
+			"description": "Application data identifier for eDelivery"
+		}
+	}
+}
+

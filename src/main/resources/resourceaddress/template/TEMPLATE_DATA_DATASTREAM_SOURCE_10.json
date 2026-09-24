@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "required": [
+    "type",
+    "topic",
+    "bootstrapServers",
+    "saslMechanism",
+    "securityProtocol",
+    "groupPrefix",
+    "tokenUrl",
+    "revokeUrl"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "DataStream",
+      "default": "DataStream"
+    },
+    "topic": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Kafka topic to consume from."
+    },
+    "bootstrapServers": {
+      "type": "string",
+      "format": "uri",
+      "description": "Comma-separated list of Kafka bootstrap server endpoints."
+    },
+    "saslMechanism": {
+      "type": "string",
+      "enum": ["OAUTHBEARER"],
+      "description": "SASL mechanism to use for authentication."
+    },
+    "securityProtocol": {
+      "type": "string",
+      "enum": ["SASL_PLAINTEXT", "SASL_SSL"],
+      "description": "Security protocol for Kafka connection."
+    },
+    "pollDuration": {
+      "type": "number",
+      "description": "Polling interval in milliseconds. Optional; e.g., 10000 for 10 seconds."
+    },
+    "groupPrefix": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Prefix for Kafka consumer group."
+    },
+    "tokenUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "OAuth token endpoint for the Kafka authentication."
+    },
+    "revokeUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "OAuth revoke token endpoint."
+    }
+  }
+}

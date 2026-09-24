@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "required": [
+    "provisioningAPI",
+    "deploymentScriptId"
+  ],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "Infrastructure",
+      "default": "Infrastructure"
+    },
+    "provisioningAPI": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL of the provisioning API endpoint"
+    },
+    "deploymentScriptId": {
+      "type": "string",
+      "description": "The ID of the deployment script"
+    }
+  }
+}

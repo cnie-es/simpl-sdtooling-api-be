@@ -1,0 +1,687 @@
+info:
+  title: SD Tooling API
+  description: |-
+    The APIs described in the following document enable the management
+    of the lifecycle for creating a Resource Description on the provider side, including
+    its publication on the federated catalogue. The available APIs allow to define
+    access and usage policies, specify the Resource Address on the provider side,
+    and manage the validation and publication process on the federated catalogue.
+
+    ## Business Context
+
+    The API facilitates the creation and management of Resource Descriptions in a federated data space. It enables providers to publish metadata about their data assets on a federated catalogue, define access and usage policies, and manage the validation and publication workflow. This supports discoverability and interoperability across the data ecosystem.
+
+
+    ### Key Actors
+
+    - **Provider**: Creates and publishes Resource Descriptions, defines policies, and manages validation.
+
+    - **Governance Authority**: Hosts the Federated Catalogue
+
+    ### Typical Flow
+
+    1. Create a Resource Description.
+
+    2. Define access and usage policies.
+
+    3. Specify the Resource Address.
+
+    4. Submit the Resource Description for validation
+
+    5. Publish the Resource Description on the federated catalogue
+  contact:
+    name: Simpl Programme
+    url: https://simpl-programme.ec.europa.eu/
+    email: cnect-simpl@ec.europa.eu
+  license:
+    name: European Union Public License (EUPL) 1.2
+    url: https://interoperable-europe.ec.europa.eu/sites/default/files/custom-page/attachment/eupl_v1.2_en.pdf
+  version: "1.0"
+servers:
+- url: https://creation-wizard-api.dev.simpl-europe.eu/v2
+security:
+- bearerAuth: []
+openapi: 3.0.1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      description: IAA cloud gateway JWT token
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UnauthorizedProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    InternalServerErrorProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    NotFoundProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    NotAcceptableProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    InputObject:
+      type: object
+      properties:
+        in:
+          type: string
+          enum:
+          - body
+          - path
+          - query
+          - header
+        name:
+          type: string
+        value:
+          type: object
+    BadRequestProblem:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputValidationIssue'
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+    InputValidationIssue:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        href:
+          type: string
+          format: uri
+        title:
+          type: string
+        detail:
+          type: string
+        in:
+          type: string
+          enum:
+          - body
+          - path
+          - query
+          - header
+        name:
+          type: string
+        value:
+          type: object
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputObject'
+        additionalProperties:
+          type: object
+          additionalProperties:
+            type: object
+paths:
+  /schemas/{schemaId}/content:
+    get:
+      tags:
+      - Schema
+      summary: Returns schema content based on schemaId
+      description: Returns schema content for the specified schema identifier
+      operationId: getSchemaContent
+      parameters:
+      - name: schemaId
+        in: path
+        description: Identifier of the TTL schema
+        required: true
+        schema:
+          type: string
+          description: Identifier of the schema
+          example: data-offeringShape
+        example: data-offeringShape
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              example:
+                type: urn:problem-type:simpl:badRequest
+                title: Invalid payload
+                status: 400
+                detail: Invalid request
+                instance: /schemas/dataOfferingShape/content
+                issues: []
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              example:
+                type: urn:problem-type:simpl:internalServerError
+                title: Internal Server Error
+                status: 500
+                instance: /schemas/dataOfferingShape/content
+                detail: Unexpected internal error
+        "200":
+          description: TTL schema file content
+          content:
+            text/turtle:
+              schema:
+                type: string
+              examples:
+                ttlExample:
+                  summary: Example TTL content
+                  description: ttlExample
+                  value: '@prefix ex: <http://example.org/> .'
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedProblem'
+              example:
+                type: urn:problem-type:simpl:unauthorized
+                title: Unauthorized
+                status: 401
+                instance: /schemas/dataOfferingShape/content
+                detail: Missing or invalid Authorization header
+        "404":
+          description: Not Found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                Not Found:
+                  summary: Schema not found
+                  description: Not Found
+                  value:
+                    type: urn:problem-type:simpl:notFound
+                    title: Resource not found
+                    status: 404
+                    detail: Schema with identifier 'dataOfferingShape' was not found
+                    instance: /schemas/dataOfferingShape/content
+        "406":
+          description: Not Acceptable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotAcceptableProblem'
+              examples:
+                Not Acceptable Example:
+                  description: Requested media type is not supported
+                  value:
+                    type: urn:problem-type:simpl:notAcceptable
+                    title: Not Acceptable
+                    status: 406
+                    detail: The requested media type could not be provided.
+                    instance: /schemas/dataOfferingShape/content
+  /schemas/{schemaId}/{version}:
+    get:
+      tags:
+      - Schema
+      summary: Retrieve a specific version of a schema
+      description: Retrieves the content of a specific version of a schema identified by its schema name and version. The endpoint returns the representation of the schema as published by the Governance Authority
+      operationId: getSchemaByVersion
+      parameters:
+      - name: schemaId
+        in: path
+        description: Unique identifier of the TTL schema
+        required: true
+        schema:
+          type: string
+          description: Unique identifier of the TTL schema
+          example: dataOfferingShape
+        example: dataOfferingShape
+      - name: version
+        in: path
+        description: Version of the TTL schema
+        required: true
+        schema:
+          type: string
+          description: Version of the TTL schema
+          example: 1.0.0
+        example: 1.0.0
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              example:
+                type: urn:problem-type:simpl:validationError
+                title: Invalid payload
+                status: 400
+                detail: missing required arguments
+                instance: /schemas/{schemaName}/{version}
+                issues:
+                - detail: Field 'schemaName' must not be empty
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              example:
+                type: urn:problem-type:simpl:internalServerError
+                title: Internal Server Error
+                status: 500
+                instance: /schemas/{schemaName}/{version}
+                detail: Unexpected internal error
+        "200":
+          description: Returns the content of the specified TTL file
+          content:
+            text/turtle:
+              schema:
+                type: string
+              example: |
+                @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+                @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+                @prefix sh: <http://www.w3.org/ns/shacl#> .
+                @prefix simpl: <http://w3id.org/gaia-x/simpl#> .
+                @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+                simpl:DataOfferingShape
+                  rdf:type sh:NodeShape ;
+                  sh:targetClass simpl:DataOffering ;
+                  sh:property [
+                    sh:path simpl:name ;
+                    sh:datatype xsd:string ;
+                    sh:minCount 1 ;
+                    sh:maxCount 1 ;
+                    sh:description "The name of the data offering." ;
+                  ] ;
+                  sh:property [
+                    sh:path simpl:description ;
+                    sh:datatype xsd:string ;
+                    sh:minCount 0 ;
+                    sh:maxCount 1 ;
+                    sh:description "A description of the data offering." ;
+                  ] ;
+                  sh:property [
+                    sh:path simpl:format ;
+                    sh:datatype xsd:string ;
+                    sh:minCount 1 ;
+                    sh:maxCount 1 ;
+                    sh:description "The format of the data offering, e.g. XML, JSON, CSV." ;
+                  ] .
+        "404":
+          description: Schema not found
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotFoundProblem'
+              examples:
+                Schema Not Found Example:
+                  description: Schema not found
+                  value:
+                    type: urn:problem-type:simpl:notFound
+                    title: Resource not found
+                    status: 404
+                    detail: Schema with identifier 'dataOfferingShape' was not found
+                    instance: /schemas/dataOfferingShape/content
+        "406":
+          description: Not Acceptable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotAcceptableProblem'
+              examples:
+                Not Acceptable Example:
+                  description: Requested media type is not supported
+                  value:
+                    type: urn:problem-type:simpl:notAcceptable
+                    title: Not Acceptable
+                    status: 406
+                    detail: Requested media type 'application/json' is not supported. Use 'text/turtle'.
+                    instance: /schemas/dataOfferingShape/content
+  /schemas:
+    get:
+      tags:
+      - Schema
+      summary: List all available schema
+      description: Returns all schema info in order to allow them to be selected and initiate the self-description creation process.
+      operationId: getSchemas
+      parameters:
+      - name: resourceType
+        in: query
+        description: resourceType
+        required: false
+        schema:
+          type: string
+        example: data
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BadRequestProblem'
+              example:
+                type: urn:problem-type:simpl:badRequest
+                title: Invalid payload
+                status: 400
+                detail: Invalid request
+                instance: /schemas
+                issues: []
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorProblem'
+              example:
+                type: urn:problem-type:simpl:internalServerError
+                title: Internal Server Error
+                status: 500
+                instance: /schemas
+                detail: Unexpected internal error
+        "200":
+          description: A map of available TTL schema files
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                Available schemas:
+                  description: Available schemas
+                  value:
+                    schemas:
+                    - title: Application Asset
+                      name: health
+                      description: Schema for describing a software application.
+                      resourceType: APPLICATION
+                      version: 1.0.0
+                      schemaId: applicationHealth
+                    - title: Data Offering
+                      name: Data offering
+                      description: SHACL shape for data offering self-descriptions.
+                      resourceType: DATA
+                      version: 1.0.0
+                      schemaId: dataOfferingShape
+                No schemas available:
+                  description: No schemas available for the current environment/tenant
+                  value:
+                    schemas: []
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedProblem'
+              example:
+                type: urn:problem-type:simpl:unauthorized
+                title: Unauthorized
+                status: 401
+                instance: /schemas
+                detail: Missing or invalid Authorization header
+        "406":
+          description: Not Acceptable
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/NotAcceptableProblem'
+              examples:
+                Not Acceptable Example:
+                  description: Requested media type is not supported
+                  value:
+                    type: urn:problem-type:simpl:notAcceptable
+                    title: Not Acceptable
+                    status: 406
+                    detail: The requested media type could not be provided.
+                    instance: /schemas
+  /selfDescriptions/enriched:
+    post:
+      tags:
+      - Self Description
+      summary: Enriches and validates a self-description using the provided metadata and additional properties
+      description: Adds hashing, registers asset and policies into the provider EDC, creates a contract definition on EDC connector and validates the resulting SD json enriched with all info. Allows passing additional properties via a JSON string.
+      operationId: enrichAndValidate
+      parameters:
+      - name: schemaId
+        in: query
+        description: schemaId
+        required: true
+        schema:
+          type: string
+        example: DataSchema1
+      - name: templateId
+        in: query
+        description: resource address template id
+        required: true
+        schema:
+          type: string
+        example: 1
+      requestBody:
+        description: Request body containing SD JSON-LD
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                '@context': http://www.w3.org/ns/odrl.jsonld
+                '@type': Set
+                assigner:
+                  role: http://www.w3.org/ns/odrl/2/assigner
+                  uid: provider
+                permission:
+                - action:
+                  - http://simpl.eu/odrl/actions/search
+                  assignee:
+                    role: http://www.w3.org/ns/odrl/2/assignee
+                    uid: CONSUMER
+                  constraint:
+                  - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                    operator: http://www.w3.org/ns/odrl/2/gteq
+                    rightOperand: 2024-08-01T00:00:00Z
+                  - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                    operator: http://www.w3.org/ns/odrl/2/lteq
+                    rightOperand: 2024-08-31T23:59:59Z
+                  target: ""
+                profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                target: ""
+                uid: 68777919-f260-4305-9c41-d4266ac0a639
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+          content:
+            application/problem+json:
+              examples:
+                Bad Request Error Example:
+                  description: Bad Request Error Example
+                  value:
+                    type: urn:problem-type:simpl:validationError
+                    title: Parameter validation error
+                    status: 400
+                    detail: One or more parameters are invalid
+                    issues:
+                    - type: urn:problem-type:simpl:invalidParameter
+                      title: Invalid parameter
+                      detail: The schemaId parameter must meet specific criteria
+                      in: query
+                      name: schemaId
+                      value: invalidValue
+        "500":
+          description: Internal Server Error
+          content:
+            application/problem+json:
+              examples:
+                Internal Server Error Example:
+                  description: Internal Server Error Example
+                  value:
+                    type: urn:problem-type:simpl:internalServerError
+                    title: Internal Server Error
+                    status: 500
+                    detail: Unexpected internal error
+                    instance: /selfDescriptions/enriched
+        "200":
+          description: Successfully enriched and validated SD JSON-LD
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                SD json file enriched and validated:
+                  description: SD json file enriched and validated
+                  value:
+                    '@context': http://www.w3.org/ns/odrl.jsonld
+                    '@type': Set
+                    assigner:
+                      role: http://www.w3.org/ns/odrl/2/assigner
+                      uid: provider
+                    permission:
+                    - action:
+                      - http://simpl.eu/odrl/actions/search
+                      assignee:
+                        role: http://www.w3.org/ns/odrl/2/assignee
+                        uid: CONSUMER
+                      constraint:
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/gteq
+                        rightOperand: 2024-08-01T00:00:00Z
+                      - leftOperand: http://www.w3.org/ns/odrl/2/dateTime
+                        operator: http://www.w3.org/ns/odrl/2/lteq
+                        rightOperand: 2024-08-31T23:59:59Z
+                      target: ""
+                    profile: http://www.w3.org/ns/odrl/2/odrl.jsonld
+                    target: ""
+                    uid: 68777919-f260-4305-9c41-d4266ac0a639
+        "401":
+          description: Unauthorized
+          content:
+            application/problem+json:
+              examples:
+                Unauthorized Error Example:
+                  description: Unauthorized Error Example
+                  value:
+                    type: urn:problem-type:simpl:unauthorized
+                    title: Unauthorized
+                    status: 401
+                    detail: Missing or invalid Authorization header
+                    instance: /selfDescriptions/enriched
+        "406":
+          description: Not Acceptable
+          content:
+            application/problem+json:
+              examples:
+                Not Acceptable Error Example:
+                  description: Not Acceptable Error Example
+                  value:
+                    type: urn:problem-type:simpl:notAcceptable
+                    title: Not Acceptable
+                    status: 406
+                    detail: The requested media type could not be provided
+                    instance: /selfDescriptions/enriched
+        "415":
+          description: Unsupported Media Type
+          content:
+            application/problem+json:
+              examples:
+                Unsupported Media Type Error Example:
+                  description: Unsupported Media Type Error Example
+                  value:
+                    type: urn:problem-type:simpl:unsupportedMediaType
+                    title: Unsupported Media Type
+                    status: 415
+                    detail: The media type in the request payload is unsupported
+                    instance: /selfDescriptions/enriched
+      deprecated: true

@@ -1,0 +1,8 @@
+{
+  "id":"LCRSchema_EN",
+  "name": "LCR",
+  "title": "LCR",
+  "description": "Schema for lexical conceptual resource offerings in the edval dataspace",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

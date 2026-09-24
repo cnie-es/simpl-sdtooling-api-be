@@ -1,0 +1,8 @@
+{
+  "id":"ApiSchema_EU",
+  "name": "API REST",
+  "title": "API REST",
+  "description": "Edval dataspaceren API REST motako eskaintzen eskema",
+  "resourceType": "data",
+  "version": "1.0.0"
+}

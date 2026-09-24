@@ -1,0 +1,86 @@
+{
+  "type": "VerticalLayout",
+  "elements": [
+    {
+      "type": "Control",
+      "scope": "#/properties/type",
+      "label": "Source Type",
+      "options": {
+        "readonly": true
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/deprovisioningEnabled",
+      "label": "Deprovisioning enabled",
+      "options": {
+        "readonly": true
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/topic",
+      "label": "Topic",
+      "options": {
+        "placeholder": "Enter Kafka topic name"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/bootstrapServers",
+      "label": "Bootstrap Servers",
+      "options": {
+        "placeholder": "Enter comma-separated Kafka server endpoints"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/saslMechanism",
+      "label": "SASL Mechanism",
+      "options": {
+        "readonly": true,
+        "description": "Allowed value: OAUTHBEARER"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/securityProtocol",
+      "label": "Security Protocol",
+      "options": {
+        "description": "Choose between SASL_PLAINTEXT or SASL_SSL"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/pollDuration",
+      "label": "Poll Duration (ms)",
+      "options": {
+        "placeholder": "Optional. Example: 10000 for 10 seconds"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/groupPrefix",
+      "label": "Group Prefix",
+      "options": {
+        "placeholder": "Enter consumer group prefix"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/tokenUrl",
+      "label": "Token URL",
+      "options": {
+        "placeholder": "Enter OAuth token URL"
+      }
+    },
+    {
+      "type": "Control",
+      "scope": "#/properties/revokeUrl",
+      "label": "Revoke URL",
+      "options": {
+        "placeholder": "Enter OAuth revoke token endpoint"
+      }
+    }
+  ]
+}

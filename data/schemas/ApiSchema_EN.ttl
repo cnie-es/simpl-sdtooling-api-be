@@ -1,0 +1,671 @@
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix edval: <http://w3id.org/gaia-x/edval#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix gax-validation: <http://w3id.org/gaia-x/validation#> .
+@prefix ms: <http://w3id.org/meta-share/meta-share/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix simpl: <http://w3id.org/gaia-x/simpl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+gax-validation:ApiOfferingShape a sh:NodeShape ;
+    sh:property [ skos:example "'(a structure object of type ms:ToolService with title, description, lrType, version, keyword, etc.)'" ;
+            sh:description "REST API metadata modelled as an ms:ToolService / dcat:DataService for interoperability with European data spaces. Describes the API as a language technology tool/service with core identification metadata and language resource type." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "api asset" ;
+            sh:node gax-validation:ToolServiceShape ;
+            sh:order 1 ;
+            sh:path edval:apiAsset ],
+        [ skos:example "'true', 'false'" ;
+            sh:datatype xsd:boolean ;
+            sh:description "Indicates whether this language resource offering is publicly accessible (true) or restricted to authorized parties only (false)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "is public offering" ;
+            sh:order 2 ;
+            sh:path edval:isPublicOffering ],
+        [ skos:example "'(a structure object of type DataProperties'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "data properties" ;
+            sh:node gax-validation:DataPropertiesShape ;
+            sh:order 3 ;
+            sh:path simpl:dataProperties ],
+        [ skos:example "'(a structure object of type GeneralServiceProperties'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "general service properties" ;
+            sh:node gax-validation:GeneralServicePropertiesShape ;
+            sh:order 4 ;
+            sh:path simpl:generalServiceProperties ],
+        [ skos:example "'(a structure object of type AssetProperties'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "asset properties" ;
+            sh:node gax-validation:AssetPropertiesShape ;
+            sh:order 5 ;
+            sh:path simpl:assetProperties ],
+        [ skos:example "'(a structure object of type ProviderInformation'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "provider information" ;
+            sh:node gax-validation:ProviderInformationShape ;
+            sh:order 6 ;
+            sh:path simpl:providerInformation ],
+        [ skos:example "'(a structure object of type OfferingPrice'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "offering price" ;
+            sh:node gax-validation:OfferingPriceShape ;
+            sh:order 7 ;
+            sh:path simpl:offeringPrice ],
+        [ skos:example "'(a structure object of type ServicePolicy'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "service policy" ;
+            sh:node gax-validation:ServicePolicyShape ;
+            sh:order 8 ;
+            sh:path simpl:servicePolicy ],
+        [ skos:example "'(a structure object of type ContractTemplate'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template" ;
+            sh:node gax-validation:ContractTemplateShape ;
+            sh:order 9 ;
+            sh:path simpl:contractTemplate ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'(a structure object of type EdcRegistration'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "edc registration" ;
+            sh:node gax-validation:EdcRegistrationShape ;
+            sh:order 10 ;
+            sh:path simpl:edcRegistration ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'(a structure object of type EdcConnector'" ;
+            sh:description "Basic classification of the service as per provision type and service model." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "edc connector" ;
+            sh:node gax-validation:EdcConnectorShape ;
+            sh:order 11 ;
+            sh:path simpl:edcConnector ] ;
+    sh:targetClass edval:ApiOffering .
+
+gax-validation:AssetPropertiesShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "requiredOnFrontendOnly" ) ;
+            skos:example "'{ 'Json' : 'Object' }'" ;
+            sh:datatype xsd:string ;
+            sh:description "Provider Data address" ;
+            sh:maxCount 1 ;
+            sh:name "provider data address" ;
+            sh:order 1 ;
+            sh:path simpl:providerDataAddress ] ;
+    sh:targetClass simpl:AssetProperties .
+
+gax-validation:ContractTemplateShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Contract Template 1', 'Contract Template 2'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates Contract Template Document" ;
+            sh:in ( "Contract Template 1" "Contract Template 2" "Contract Template 3" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template document" ;
+            sh:order 1 ;
+            sh:path simpl:contractTemplateDocument ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Free text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates HASH VALUE" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template hash value" ;
+            sh:order 2 ;
+            sh:path simpl:contractTemplateHashValue ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Free text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates HASH ALGORITHM" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template hash alg" ;
+            sh:order 3 ;
+            sh:path simpl:contractTemplateHashAlg ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'URL'" ;
+            sh:datatype xsd:string ;
+            sh:description "URL" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract template u r l" ;
+            sh:order 4 ;
+            sh:path simpl:contractTemplateURL ] ;
+    sh:targetClass simpl:ContractTemplate .
+
+gax-validation:DataPropertiesShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'http://provenanceURL.eu'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "Provenance" ;
+            sh:maxCount 1 ;
+            sh:name "produced by" ;
+            sh:order 1 ;
+            sh:path simpl:producedBy ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'csv, xml'" ;
+            sh:datatype xsd:string ;
+            sh:description "Format under which the data is distributed (e.g. csv, xml, …)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "format" ;
+            sh:order 2 ;
+            sh:path simpl:format ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'http://mysite/swagger-ui/index.html'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "Schema of the dataset, depends on the type of data for JSON it would be JSON Schema Description that states what fields the data has and the types." ;
+            sh:name "open api" ;
+            sh:order 3 ;
+            sh:path simpl:openApi ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'http://mysite/swagger-ui/index.html'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "Additional Information about the dataset" ;
+            sh:maxCount 1 ;
+            sh:name "additional info" ;
+            sh:order 4 ;
+            sh:path simpl:additionalInfo ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Related datasets" ;
+            sh:name "related datasets" ;
+            sh:order 5 ;
+            sh:path simpl:relatedDatasets ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Target users" ;
+            sh:name "target users" ;
+            sh:order 6 ;
+            sh:path simpl:targetUsers ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Data Quality (to include metrics such as completeness, accuracy, timeliness and other)" ;
+            sh:name "data quality" ;
+            sh:order 7 ;
+            sh:path simpl:dataQuality ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Encryption: Describes the encryption algorithms and keys used to secure the data" ;
+            sh:maxCount 1 ;
+            sh:name "encryption" ;
+            sh:order 8 ;
+            sh:path simpl:encryption ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Anonymization/pseudonymization: Indicates whether sensitive information has been anonymized or pseudonymized to protect privacy" ;
+            sh:maxCount 1 ;
+            sh:name "anonymization" ;
+            sh:order 9 ;
+            sh:path simpl:anonymization ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s]*$" ] ;
+    sh:targetClass simpl:DataProperties .
+
+gax-validation:DocumentDocumentationGroup a sh:PropertyGroup ;
+    rdfs:label "Documentation" ;
+    sh:order 1 .
+
+gax-validation:DocumentShape a sh:NodeShape ;
+    sh:property [ skos:example "'Smith, J. et al. (2023). Spanish Legal Corpus v1.0. Journal of Language Resources.'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Free-text citation for the documentation." ;
+            sh:group gax-validation:DocumentDocumentationGroup ;
+            sh:minCount 1 ;
+            sh:name "citation text" ;
+            sh:order 1 ;
+            sh:path ms:citationText ] ;
+    sh:targetClass foaf:Document .
+
+gax-validation:EdcConnectorShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'providerEndpointURL'" ;
+            sh:datatype xsd:string ;
+            sh:description "Provider endpoint url" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "provider endpoint u r l" ;
+            sh:order 1 ;
+            sh:path simpl:providerEndpointURL ] ;
+    sh:targetClass simpl:EdcConnector .
+
+gax-validation:EdcRegistrationShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of contract definition" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contract definition id" ;
+            sh:order 1 ;
+            sh:path simpl:contractDefinitionId ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of service policy" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "service policy id" ;
+            sh:order 2 ;
+            sh:path simpl:servicePolicyId ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of access policy" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "access policy id" ;
+            sh:order 3 ;
+            sh:path simpl:accessPolicyId ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Identifier'" ;
+            sh:datatype xsd:string ;
+            sh:description "Unique identifier of asset" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "asset id" ;
+            sh:order 4 ;
+            sh:path simpl:assetId ] ;
+    sh:targetClass simpl:EdcRegistration .
+
+gax-validation:GeneralServicePropertiesShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Title'" ;
+            sh:datatype xsd:string ;
+            sh:description "A short text title for the dataset/application/infrastructure" ;
+            sh:maxCount 1 ;
+            sh:maxLength 255 ;
+            sh:minCount 1 ;
+            sh:minLength 1 ;
+            sh:name "name" ;
+            sh:order 1 ;
+            sh:path simpl:name ;
+            sh:pattern "^(.|\\s)*[a-zA-Z]+(.|\\s)*$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Description'" ;
+            sh:datatype xsd:string ;
+            sh:description "A description for the dataset/application/infrastructure" ;
+            sh:maxCount 1 ;
+            sh:maxLength 1000 ;
+            sh:minCount 1 ;
+            sh:minLength 1 ;
+            sh:name "description" ;
+            sh:order 2 ;
+            sh:path simpl:description ;
+            sh:pattern "^(.|\\s)*[a-zA-Z]+(.|\\s)*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'URL, handle'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "The location where the dataset/application/infrastructure can be found (likely an endpoint URL)" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "service access point" ;
+            sh:order 3 ;
+            sh:path simpl:serviceAccessPoint ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'Keywords'" ;
+            sh:datatype xsd:string ;
+            sh:description "Keywords" ;
+            sh:maxCount 16 ;
+            sh:maxLength 50 ;
+            sh:minLength 1 ;
+            sh:name "keywords" ;
+            sh:order 4 ;
+            sh:path simpl:keywords ;
+            sh:pattern "^(.|\\s)*[a-zA-Z]+(.|\\s)*$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'EN, IT'" ;
+            sh:datatype xsd:string ;
+            sh:description "Language (of the metadata, like the title, description)" ;
+            sh:in ( "es" "gl" "ca" "eu" "en" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "in language" ;
+            sh:order 5 ;
+            sh:path simpl:inLanguage ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'application, data, infrastructure'" ;
+            sh:datatype xsd:string ;
+            sh:description "Offering type using for search" ;
+            sh:in ( "application" "data" "infrastructure" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "offering type" ;
+            sh:order 6 ;
+            sh:path simpl:offeringType ],
+        [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'Id'" ;
+            sh:datatype xsd:string ;
+            sh:description "Sharing Method Id type using for Resource Address Template" ;
+            sh:maxCount 1 ;
+            sh:name "sharing method id" ;
+            sh:order 7 ;
+            sh:path simpl:sharingMethodId ] ;
+    sh:targetClass simpl:GeneralServiceProperties .
+
+gax-validation:LicenseDocumentShape a sh:NodeShape ;
+    sh:property [ skos:example "'Creative Commons Attribution 4.0 International'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable title of the license" ;
+            sh:minCount 1 ;
+            sh:name "title" ;
+            sh:order 1 ;
+            sh:path dct:title ],
+        [ skos:example "'Permite compartir y adaptar con atribución.'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable description of the license" ;
+            sh:minCount 1 ;
+            sh:name "description" ;
+            sh:order 2 ;
+            sh:path dct:description ],
+        [ skos:example "'https://creativecommons.org/licenses/by/4.0/legalcode'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "IRI of the legal code/full text of the license (cc:legalcode)." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "legalcode" ;
+            sh:order 3 ;
+            sh:path cc:legalcode ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ skos:example "'(a structure object of type adms:Identifier with skos:notation and adms:schemaAgency)'" ;
+            sh:description "ADMS identifier(s) for the license document." ;
+            sh:name "identifier" ;
+            sh:node gax-validation:IdentifierShape ;
+            sh:order 4 ;
+            sh:path adms:identifier ] ;
+    sh:targetClass dct:LicenseDocument .
+
+gax-validation:OfferingPriceShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'www.simpl.com'" ;
+            sh:datatype xsd:anyURI ;
+            sh:description "URL to the used license" ;
+            sh:maxLength 255 ;
+            sh:minCount 1 ;
+            sh:minLength 1 ;
+            sh:name "license" ;
+            sh:order 1 ;
+            sh:path simpl:license ;
+            sh:pattern "^([Hh][Tt][Tt][Pp][Ss]?):\\/\\/(?:www\\.)?[A-Za-z0-9][-A-Za-z0-9@:%_\\+~#=\\.]{0,255}\\.[A-Za-z0-9()]{1,6}\\b(?:[-A-Za-z0-9()@:%_\\+.~#?&/=]*)$" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'BGN, EUR, CZK'" ;
+            sh:datatype xsd:string ;
+            sh:description "Price and conditions" ;
+            sh:in ( "BGN" "EUR" "CZK" "DKK" "HUF" "PLN" "RON" "SEK" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "currency" ;
+            sh:order 2 ;
+            sh:path simpl:currency ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'0, 1, 2'" ;
+            sh:datatype xsd:decimal ;
+            sh:description "Price and conditions" ;
+            sh:maxCount 1 ;
+            sh:maxInclusive 99999999999.0 ;
+            sh:minCount 1 ;
+            sh:minInclusive 0.0 ;
+            sh:name "price" ;
+            sh:order 3 ;
+            sh:path simpl:price ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'free, commercial'" ;
+            sh:datatype xsd:string ;
+            sh:description "Price Type" ;
+            sh:in ( "free" "commercial" ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "price type" ;
+            sh:order 4 ;
+            sh:path simpl:priceType ] ;
+    sh:targetClass simpl:OfferingPrice .
+
+gax-validation:ProviderInformationShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" ) ;
+            skos:example "'123'" ;
+            sh:datatype xsd:string ;
+            sh:description "A reference to ID of the dataset/application/infrastructure provider" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "provided by" ;
+            sh:order 1 ;
+            sh:path simpl:providedBy ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'support'" ;
+            sh:datatype xsd:string ;
+            sh:description "Who to contact in case of questions/issues" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "contact" ;
+            sh:order 2 ;
+            sh:path simpl:contact ;
+            sh:pattern "^[\\w\\-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$" ],
+        [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'signature'" ;
+            sh:datatype xsd:string ;
+            sh:description "A digital signature that ensures that the provider is the one that uploaded the Self-description" ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "signature" ;
+            sh:order 3 ;
+            sh:path simpl:signature ;
+            sh:pattern "^[a-zA-Z0-9][a-zA-Z0-9\\s-]*$" ] ;
+    sh:targetClass simpl:ProviderInformation .
+
+gax-validation:ServicePolicyShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ODRL policy'" ;
+            sh:datatype xsd:string ;
+            sh:description "Access policy to define who can access the dataset" ;
+            sh:minCount 1 ;
+            sh:name "access-policy" ;
+            sh:order 1 ;
+            sh:path simpl:access-policy ;
+            sh:pattern "[:,\\{\\}\\[\\]]|(\".*?\")|('.*?')|[-\\w.]+" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'ODRL policy'" ;
+            sh:datatype xsd:string ;
+            sh:description "Usage policy to define how a dataset can be used" ;
+            sh:minCount 1 ;
+            sh:name "usage-policy" ;
+            sh:order 2 ;
+            sh:path simpl:usage-policy ;
+            sh:pattern "[:,\\{\\}\\[\\]]|(\".*?\")|('.*?')|[-\\w.]+" ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'Free text'" ;
+            sh:datatype xsd:string ;
+            sh:description "Indicates compliance with relevant data protection regulations and standards" ;
+            sh:name "data protection regime" ;
+            sh:order 3 ;
+            sh:path simpl:dataProtectionRegime ;
+            sh:pattern "[:,\\{\\}\\[\\]]|(\".*?\")|('.*?')|[-\\w.]+" ] ;
+    sh:targetClass simpl:ServicePolicy .
+
+gax-validation:ToolServiceDocumentationGroup a sh:PropertyGroup ;
+    rdfs:label "Documentation" ;
+    sh:order 6 .
+
+gax-validation:ToolServiceIntellectualPropertyRightsGroup a sh:PropertyGroup ;
+    rdfs:label "Intellectual Property Rights" ;
+    sh:order 3 .
+
+gax-validation:ToolServiceLicenseGroup a sh:PropertyGroup ;
+    rdfs:label "License" ;
+    sh:order 5 .
+
+gax-validation:ToolServicePublisherGroup a sh:PropertyGroup ;
+    rdfs:label "Publisher" ;
+    sh:order 4 .
+
+gax-validation:ToolServiceShape a sh:NodeShape ;
+    sh:property [ simpl:configure ( "hiddenInFrontend" "useForAdvancedSearch" ) ;
+            skos:example "'ms:toolService1'" ;
+            sh:description "Language resource type IRI identifying this asset as a tool/service (from ms:LRTypeTaxonomy)." ;
+            sh:in ( ms:toolService1 ) ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "lr type" ;
+            sh:order 1 ;
+            sh:path ms:lrType ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'EDVAL API para análisis de sentimientos'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable title of the tool/service." ;
+            sh:group gax-validation:ToolServiceBasicInformationGroup ;
+            sh:minCount 1 ;
+            sh:name "title" ;
+            sh:order 2 ;
+            sh:path dct:title ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'REST API para análisis de sentimientos multilingüe'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Human-readable description of the tool/service capabilities and purpose." ;
+            sh:group gax-validation:ToolServiceBasicInformationGroup ;
+            sh:minCount 1 ;
+            sh:name "description" ;
+            sh:order 3 ;
+            sh:path dct:description ],
+        [ skos:example "'1.0', '2.1.3'" ;
+            sh:datatype xsd:string ;
+            sh:description "Version identifier of the tool/service release." ;
+            sh:group gax-validation:ToolServiceBasicInformationGroup ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "version" ;
+            sh:order 4 ;
+            sh:path dcat:version ],
+        [ simpl:configure ( "useForAdvancedSearch" ) ;
+            skos:example "'NLP', 'análisis de sentimientos'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Keywords describing the tool/service function and domain" ;
+            sh:group gax-validation:ToolServiceBasicInformationGroup ;
+            sh:maxCount 10 ;
+            sh:minCount 1 ;
+            sh:name "keyword" ;
+            sh:order 5 ;
+            sh:path dcat:keyword ],
+        [ skos:example "'SLC', 'ES-Legal-Corpus'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Alternative title or acronym of the resource." ;
+            sh:group gax-validation:ToolServiceIdentificationGroup ;
+            sh:name "alternative" ;
+            sh:order 6 ;
+            sh:path dct:alternative ],
+        [ skos:example "'(a structure object of type adms:Identifier with skos:notation and adms:schemaAgency)'" ;
+            sh:description "ADMS identifier(s) for the resource (e.g., DOI, Handle, ISNI, ROR)." ;
+            sh:group gax-validation:ToolServiceIdentificationGroup ;
+            sh:name "identifier" ;
+            sh:node gax-validation:IdentifierShape ;
+            sh:order 7 ;
+            sh:path adms:identifier ],
+        [ skos:example "'(a structure object of type foaf:Organization)'" ;
+            sh:description "Intellectual Property Rights holder(s) of the service." ;
+            sh:group gax-validation:ToolServiceIntellectualPropertyRightsGroup ;
+            sh:name "ipr holder" ;
+            sh:node gax-validation:OrganizationShape ;
+            sh:order 8 ;
+            sh:path ms:iprHolder ],
+        [ skos:example "'(a structure object of type foaf:Organization)'" ;
+            sh:description "Organization publishing or making the service available (dct:publisher)." ;
+            sh:group gax-validation:ToolServicePublisherGroup ;
+            sh:maxCount 1 ;
+            sh:name "publisher" ;
+            sh:node gax-validation:OrganizationShape ;
+            sh:order 9 ;
+            sh:path dct:publisher ],
+        [ skos:example "'(a structure object of type dct:LicenseDocument)'" ;
+            sh:description "License(s) under which the model is made available (dct:license)." ;
+            sh:group gax-validation:ToolServiceLicenseGroup ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "license" ;
+            sh:node gax-validation:LicenseDocumentShape ;
+            sh:order 10 ;
+            sh:path dct:license ],
+        [ skos:example "" ;
+            sh:description "Links a service to a document (research paper, service card, user manual, etc.) that documents the resource." ;
+            sh:group gax-validation:ToolServiceDocumentationGroup ;
+            sh:name "is documented by" ;
+            sh:node gax-validation:DocumentShape ;
+            sh:order 11 ;
+            sh:path ms:isDocumentedBy ] ;
+    sh:targetClass ms:ToolService .
+
+gax-validation:OrganizationShape a sh:NodeShape ;
+    sh:property [ skos:example "'Fundación para la Transformación de la Rioja'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Legal or display name of the publisher organization" ;
+            sh:minCount 1 ;
+            sh:name "name" ;
+            sh:order 1 ;
+            sh:path foaf:name ],
+        [ skos:example "'(a structure object of type adms:Identifier with skos:notation and adms:schemaAgency)'" ;
+            sh:description "ADMS identifier(s) for the organization (e.g., ISNI, ROR)." ;
+            sh:name "identifier" ;
+            sh:node gax-validation:IdentifierShape ;
+            sh:order 2 ;
+            sh:path adms:identifier ] ;
+    sh:targetClass foaf:Organization .
+
+gax-validation:ToolServiceIdentificationGroup a sh:PropertyGroup ;
+    rdfs:label "Identification" ;
+    sh:order 2 .
+
+gax-validation:IdentifierShape a sh:NodeShape ;
+    sh:property [ skos:example "'https://doi.org/10.57771/rnyr-fa06a', 'https://isni.org/isni/0000000121748431', 'CC-BY-NC-SA-4.0'" ;
+            sh:datatype xsd:string ;
+            sh:description "Identifier value (e.g. DOI, Handle, ISNI, ROR, SPDX). Free string, as in LanguageDCAT-AP." ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "notation" ;
+            sh:order 1 ;
+            sh:path skos:notation ],
+        [ skos:example "''ISNI International Agency'@en', ''ROR'@en'" ;
+            sh:datatype rdf:langString ;
+            sh:description "Agency responsible for the identifier schema. Supports multiple languages using language tags." ;
+            sh:name "schema agency" ;
+            sh:order 2 ;
+            sh:path adms:schemaAgency ] ;
+    sh:targetClass adms:Identifier .
+
+gax-validation:ToolServiceBasicInformationGroup a sh:PropertyGroup ;
+    rdfs:label "Basic Information" ;
+    sh:order 1 .
+
