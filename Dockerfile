@@ -8,7 +8,7 @@ ARG IMAGE_CREATED="1970-01-01T00:00:00Z"
 # the image, and the labels below point to the repository where the source code is available.
 LABEL org.opencontainers.image.title="sdtooling-api-be (CNIE-ES fork)" \
       org.opencontainers.image.description="Modified version of SIMPL sdtooling-api-be (upstream commit 744ede78), modified by the EDNEL-RIOJA project team for CNIE-ES between 2026-05-21 and 2026-09-17. See /licenses/NOTICE.EDNEL.md." \
-      org.opencontainers.image.version="1.25.2-edval" \
+      org.opencontainers.image.version="1.25.0-edval" \
       org.opencontainers.image.vendor="CNIE-ES" \
       org.opencontainers.image.licenses="Apache-2.0 AND EUPL-1.2" \
       org.opencontainers.image.source="https://github.com/cnie-es/simpl-sdtooling-api-be" \
